@@ -1,0 +1,88 @@
+openapi: '3.0.3'
+info:
+  title: Job Rotation Application APIs
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+components:
+  schemas:
+    ListAllRolesResponse:
+      description: Response containing summary of available roles for job rotation to display on main page
+      type: object
+      required:
+        - roleId
+        - roleName
+        - gradeRequired
+        - department
+      properties:
+        roleId:
+          type: string
+        roleName:
+          type: string
+        gradeRequired:
+          type: string
+        department:
+          type: string
+paths:
+  /main/available-roles:
+    get:
+      tags:
+        - Employee Main Page
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAllRolesResponse'
+  /main/available-roles/{grade}:
+    get:
+      tags:
+        - Employee Main Page
+      parameters:
+        - name: grade
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAllRolesResponse'
+  /main/available-roles/{department}:
+    get:
+      tags:
+        - Employee Main Page
+      parameters:
+        - name: department
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAllRolesResponse'
+  /main/available-roles/{duration}:
+    get:
+      tags:
+        - Employee Main Page
+      parameters:
+        - name: duration
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAllRolesResponse'
