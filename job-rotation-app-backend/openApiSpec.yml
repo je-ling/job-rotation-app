@@ -7,7 +7,7 @@ servers:
 components:
   schemas:
     ListAllRolesResponse:
-      description: Response containing summary of available roles for job rotation to display on main page
+      description: Response containing the summary of available roles to be displayed on the employee landing page
       type: object
       required:
         - roleId
