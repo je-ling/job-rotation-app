@@ -50,10 +50,10 @@ components:
         jobDescription:
           type: string
 paths:
-  /landing/available-roles:
+  /employee/list-available-roles:
     get:
       tags:
-        - Employee Landing Page
+        - Employee Actions
       responses:
         '200':
           description: OK
@@ -65,10 +65,10 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-  /landing/available-roles/{grade}:
+  /employee/available-roles/{grade}:
     get:
       tags:
-        - Employee Landing Page
+        - Employee Actions
       parameters:
         - name: grade
           in: path
@@ -86,10 +86,10 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-  /landing/available-roles/{department}:
+  /employee/available-roles/{department}:
     get:
       tags:
-        - Employee Landing Page
+        - Employee Actions
       parameters:
         - name: department
           in: path
@@ -107,10 +107,10 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-  /landing/available-roles/{duration}:
+  /employee/available-roles/{duration}:
     get:
       tags:
-        - Employee Landing Page
+        - Employee Actions
       parameters:
         - name: duration
           in: path
@@ -128,7 +128,7 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-  /landing/available-roles/{roleId}:
+  /employee/available-roles/{roleId}:
     get:
       tags:
         - Role Information
