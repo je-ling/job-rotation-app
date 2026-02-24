@@ -1,4 +1,4 @@
-package project.job_rotation_app.unit_tests;
+package project.job_rotation_app.controller.unit_tests;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;

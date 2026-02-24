@@ -1,6 +1,7 @@
 package project.job_rotation_app.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.job_rotation_app.model.Departments;
@@ -29,5 +30,14 @@ public class EmployeeBusinessServiceImpl {
 
   public List<Roles> getAvailableRolesByDuration(Duration duration) {
     return rolesRepository.findByDurationSpecified(duration);
+  }
+
+  public List<Roles> getAvailableRolesByMultiFilters(Grades grade, Departments department,
+      Duration duration) {
+    return rolesRepository.findAll().stream()
+        .filter(r -> grade == null || r.getGradeRequired() == grade)
+        .filter(r -> department == null || r.getDepartment() == department)
+        .filter(r -> duration == null || r.getDuration() == duration)
+        .collect(Collectors.toList());
   }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import project.job_rotation_app.model.Departments;
 import project.job_rotation_app.model.Duration;
@@ -36,5 +37,13 @@ public class EmployeeController {
   @GetMapping("/list-available-roles/{duration}")
   public List<Roles> getAvailableRolesByDuration(Duration duration) {
     return employeeBusinessService.getAvailableRolesByDuration(duration);
+  }
+
+  @GetMapping("/list-available-roles/filter")
+  public List<Roles> getAvailableRolesByMultiFilters(
+      @RequestParam(required = false) Grades grade,
+      @RequestParam(required = false) Departments department,
+      @RequestParam(required = false) Duration duration) {
+    return employeeBusinessService.getAvailableRolesByMultiFilters(grade, department, duration);
   }
 }

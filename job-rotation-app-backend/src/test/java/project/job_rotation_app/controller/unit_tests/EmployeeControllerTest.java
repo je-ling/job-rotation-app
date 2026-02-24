@@ -1,4 +1,4 @@
-package project.job_rotation_app.unit_tests;
+package project.job_rotation_app.controller.unit_tests;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.when;
@@ -47,6 +47,9 @@ public class EmployeeControllerTest {
         () -> employeeBusinessService.getAvailableRoles());
     assertDoesNotThrow(
         () -> employeeBusinessService.getAvailableRoles().size() == 1);
+    assertDoesNotThrow(
+        () -> employeeBusinessService.getAvailableRoles().contains(role)
+    );
 
   }
 
@@ -96,7 +99,7 @@ public class EmployeeControllerTest {
     assertDoesNotThrow(
         () -> employeeBusinessService.getAvailableRolesByGrade(Grades.GRADE_2).size() == 1);
     assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRolesByGrade(Grades.GRADE_2).contains("PMO"));
+        () -> employeeBusinessService.getAvailableRolesByGrade(Grades.GRADE_2).contains(role1));
   }
 
   @Test
@@ -174,7 +177,7 @@ public class EmployeeControllerTest {
     assertDoesNotThrow(
         () ->
             employeeBusinessService.getAvailableRolesByDepartment(Departments.PLATFORM_ENGINEERING)
-                .contains("PLATFORM_ENGINEERING"));
+                .contains(role2));
   }
 
   @Test
@@ -265,7 +268,11 @@ public class EmployeeControllerTest {
     assertDoesNotThrow(
         () ->
             employeeBusinessService.getAvailableRolesByDuration(Duration.NINE_MONTHS)
-                .contains("NINE_MONTHS"));
+                .contains(role2));
+    assertDoesNotThrow(
+        () ->
+            employeeBusinessService.getAvailableRolesByDuration(Duration.NINE_MONTHS)
+                .contains(role3));
   }
 
   @Test
@@ -303,5 +310,112 @@ public class EmployeeControllerTest {
     assertDoesNotThrow(
         () ->
             employeeBusinessService.getAvailableRolesByDuration(Duration.NINE_MONTHS).isEmpty());
+  }
+
+  @Test
+  @DisplayName("When getAvailableRoles is called and a grade and duration filter is specified, then it should return a list of available roles that match the filters")
+  public void testGetAvailableRolesByMultiFilter200() {
+    Roles role1 = new Roles();
+    role1.setRoleId(123L);
+    role1.setRoleName("Engagement Manager");
+    role1.setDepartment(Departments.ENGAGEMENT_MANAGEMENT);
+    role1.setDuration(Duration.THREE_MONTHS);
+    role1.setGradeRequired(Grades.GRADE_10);
+    role1.setJobDescription("JOB_DESCRIPTION");
+    role1.setStaffingManagerEmailAddress("test@example.com");
+
+    Roles role2 = new Roles();
+    role2.setRoleId(124L);
+    role2.setRoleName("UX Designer");
+    role2.setDepartment(Departments.DIGITAL_EXPERIENCE);
+    role2.setDuration(Duration.NINE_MONTHS);
+    role2.setGradeRequired(Grades.GRADE_3);
+    role2.setJobDescription("JOB_DESCRIPTION");
+    role2.setStaffingManagerEmailAddress("test@example.com");
+
+    Roles role3 = new Roles();
+    role2.setRoleId(125L);
+    role2.setRoleName("UX Researcher");
+    role2.setDepartment(Departments.DIGITAL_EXPERIENCE);
+    role2.setDuration(Duration.NINE_MONTHS);
+    role2.setGradeRequired(Grades.GRADE_3);
+    role2.setJobDescription("JOB_DESCRIPTION");
+    role2.setStaffingManagerEmailAddress("test@example.com");
+
+    List<Roles> roles = new ArrayList<>();
+    roles.add(role1);
+    roles.add(role2);
+    roles.add(role3);
+
+    List<Roles> result = employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3,
+        null, Duration.NINE_MONTHS);
+
+    when(employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3, null,
+        Duration.NINE_MONTHS)).thenReturn(result);
+    assertDoesNotThrow(
+        () -> employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3, null,
+            Duration.NINE_MONTHS));
+    assertDoesNotThrow(
+        () ->
+            employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3, null,
+                    Duration.NINE_MONTHS)
+                .size() == 2);
+    assertDoesNotThrow(
+        () ->
+            employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3, null,
+                Duration.NINE_MONTHS).contains(role2));
+    assertDoesNotThrow(
+        () ->
+            employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3, null,
+                Duration.NINE_MONTHS).contains(role3));
+  }
+
+  @Test
+  @DisplayName("When getAvailableRoles is called and a department and duration filter is specified but no roles are available, then it should return an empty list")
+  public void testGetAvailableRolesByMultiFilterEmptyList200() {
+    Roles role1 = new Roles();
+    role1.setRoleId(123L);
+    role1.setRoleName("Engagement Manager");
+    role1.setDepartment(Departments.ENGAGEMENT_MANAGEMENT);
+    role1.setDuration(Duration.THREE_MONTHS);
+    role1.setGradeRequired(Grades.GRADE_10);
+    role1.setJobDescription("JOB_DESCRIPTION");
+    role1.setStaffingManagerEmailAddress("test@example.com");
+
+    Roles role2 = new Roles();
+    role2.setRoleId(124L);
+    role2.setRoleName("UX Designer");
+    role2.setDepartment(Departments.DIGITAL_EXPERIENCE);
+    role2.setDuration(Duration.NINE_MONTHS);
+    role2.setGradeRequired(Grades.GRADE_3);
+    role2.setJobDescription("JOB_DESCRIPTION");
+    role2.setStaffingManagerEmailAddress("test@example.com");
+
+    Roles role3 = new Roles();
+    role2.setRoleId(125L);
+    role2.setRoleName("UX Researcher");
+    role2.setDepartment(Departments.DIGITAL_EXPERIENCE);
+    role2.setDuration(Duration.NINE_MONTHS);
+    role2.setGradeRequired(Grades.GRADE_3);
+    role2.setJobDescription("JOB_DESCRIPTION");
+    role2.setStaffingManagerEmailAddress("test@example.com");
+
+    List<Roles> roles = new ArrayList<>();
+    roles.add(role1);
+    roles.add(role2);
+    roles.add(role3);
+
+    List<Roles> result = employeeBusinessService.getAvailableRolesByMultiFilters(null,
+        Departments.ARCHITECTURE, Duration.TWELVE_MONTHS);
+
+    when(employeeBusinessService.getAvailableRolesByMultiFilters(null,
+        Departments.ARCHITECTURE, Duration.TWELVE_MONTHS)).thenReturn(result);
+    assertDoesNotThrow(
+        () -> employeeBusinessService.getAvailableRolesByMultiFilters(null,
+            Departments.ARCHITECTURE, Duration.TWELVE_MONTHS));
+    assertDoesNotThrow(
+        () ->
+            employeeBusinessService.getAvailableRolesByMultiFilters(null,
+                Departments.ARCHITECTURE, Duration.TWELVE_MONTHS).isEmpty());
   }
 }
