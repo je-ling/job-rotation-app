@@ -9,6 +9,6 @@
 ```
 
 ```bash
-./gradlew tests
+./gradlew test -i
 # to run tests 
 ```

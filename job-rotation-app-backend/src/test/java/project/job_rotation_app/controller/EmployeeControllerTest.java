@@ -1,6 +1,7 @@
-package project.job_rotation_app.controller.unit_tests;
+package project.job_rotation_app.controller;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import project.job_rotation_app.exception.BadRequestException;
 import project.job_rotation_app.model.Departments;
 import project.job_rotation_app.model.Duration;
 import project.job_rotation_app.model.Grades;
@@ -27,8 +29,10 @@ public class EmployeeControllerTest {
   RolesRepository rolesRepository;
 
   @Test
-  @DisplayName("When getAvailableRoles is called, then it should return a list of available roles")
+  @DisplayName("When getAvailableRoles endpoint is called, then it should return a list of available roles")
   public void testGetAvailableRoles200() {
+    EmployeeController controller = new EmployeeController();
+    controller.employeeBusinessService = employeeBusinessService;
 
     Roles role = new Roles();
     role.setRoleId(123L);
@@ -43,31 +47,32 @@ public class EmployeeControllerTest {
     roles.add(role);
 
     when(employeeBusinessService.getAvailableRoles()).thenReturn(roles);
-    assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRoles());
-    assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRoles().size() == 1);
-    assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRoles().contains(role)
-    );
 
+    List<Roles> result = controller.getAvailableRoles();
+    assertDoesNotThrow(() -> controller.getAvailableRoles());
+    assertDoesNotThrow(() -> result.size() == 1);
+    assertDoesNotThrow(() -> result.contains(role));
   }
 
   @Test
   @DisplayName("When getAvailableRoles is called and there are no available roles, then it should return an empty list")
   public void testGetAvailableRolesEmptyList200() {
+    EmployeeController controller = new EmployeeController();
+    controller.employeeBusinessService = employeeBusinessService;
+
     List<Roles> roles = new ArrayList<>();
 
     when(employeeBusinessService.getAvailableRoles()).thenReturn(roles);
-    assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRoles());
-    assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRoles().isEmpty());
+    List<Roles> result = controller.getAvailableRoles();
+    assertDoesNotThrow(() -> result.isEmpty());
   }
 
   @Test
   @DisplayName("When getAvailableRoles is called and a grade filter is specified, then it should return a list of available roles that match the grade filter")
   public void testGetAvailableRolesByGrade200() {
+    EmployeeController controller = new EmployeeController();
+    controller.employeeBusinessService = employeeBusinessService;
+
     Roles role1 = new Roles();
     role1.setRoleId(123L);
     role1.setRoleName("PMO");
@@ -90,21 +95,25 @@ public class EmployeeControllerTest {
     roles.add(role1);
     roles.add(role2);
 
-    List<Roles> result = employeeBusinessService.getAvailableRolesByGrade(Grades.GRADE_2);
+    when(employeeBusinessService.getAvailableRolesByGrade(Grades.GRADE_2)).thenReturn(roles);
+
+    List<Roles> result = controller.getAvailableRolesByGrade(Grades.GRADE_2);
 
     when(employeeBusinessService.getAvailableRolesByGrade(Grades.GRADE_2)).thenReturn(
         result);
+    assertDoesNotThrow(() -> controller.getAvailableRolesByGrade(Grades.GRADE_2));
     assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRolesByGrade(Grades.GRADE_2));
+        () -> result.size() == 1);
     assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRolesByGrade(Grades.GRADE_2).size() == 1);
-    assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRolesByGrade(Grades.GRADE_2).contains(role1));
+        () -> result.contains(role1));
   }
 
   @Test
   @DisplayName("When getAvailableRoles is called and a grade filter is specified but no jobs are available with the grade, then it should return an empty list")
   public void testGetAvailableRolesByGradeEmptyList200() {
+    EmployeeController controller = new EmployeeController();
+    controller.employeeBusinessService = employeeBusinessService;
+
     Roles role1 = new Roles();
     role1.setRoleId(123L);
     role1.setRoleName("PMO");
@@ -127,19 +136,22 @@ public class EmployeeControllerTest {
     roles.add(role1);
     roles.add(role2);
 
-    List<Roles> result = employeeBusinessService.getAvailableRolesByGrade(Grades.GRADE_1);
+    List<Roles> result = controller.getAvailableRolesByGrade(Grades.GRADE_1);
 
     when(employeeBusinessService.getAvailableRolesByGrade(Grades.GRADE_1)).thenReturn(
-        result);
+        roles);
     assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRolesByGrade(Grades.GRADE_1));
+        () -> controller.getAvailableRolesByGrade(Grades.GRADE_1));
     assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRolesByGrade(Grades.GRADE_1).isEmpty());
+        () -> result.isEmpty());
   }
 
   @Test
   @DisplayName("When getAvailableRoles is called and a department filter is specified, then it should return a list of available roles that match the department filter")
   public void testGetAvailableRolesByDept200() {
+    EmployeeController controller = new EmployeeController();
+    controller.employeeBusinessService = employeeBusinessService;
+
     Roles role1 = new Roles();
     role1.setRoleId(123L);
     role1.setRoleName("PMO");
@@ -162,27 +174,28 @@ public class EmployeeControllerTest {
     roles.add(role1);
     roles.add(role2);
 
-    List<Roles> result = employeeBusinessService.getAvailableRolesByDepartment(
-        Departments.PLATFORM_ENGINEERING);
+    when(employeeBusinessService.getAvailableRolesByDepartment(
+        Departments.PLATFORM_ENGINEERING)).thenReturn(roles);
+
+    List<Roles> result = controller.getAvailableRolesByDepartment(Departments.PLATFORM_ENGINEERING);
 
     when(employeeBusinessService.getAvailableRolesByDepartment(
-        Departments.PLATFORM_ENGINEERING)).thenReturn(result);
+        Departments.PLATFORM_ENGINEERING)).thenReturn(
+        result);
     assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRolesByDepartment(
-            Departments.PLATFORM_ENGINEERING));
+        () -> controller.getAvailableRolesByDepartment(Departments.PLATFORM_ENGINEERING));
     assertDoesNotThrow(
-        () ->
-            employeeBusinessService.getAvailableRolesByDepartment(Departments.PLATFORM_ENGINEERING)
-                .size() == 1);
+        () -> result.size() == 1);
     assertDoesNotThrow(
-        () ->
-            employeeBusinessService.getAvailableRolesByDepartment(Departments.PLATFORM_ENGINEERING)
-                .contains(role2));
+        () -> result.contains(role2));
   }
 
   @Test
   @DisplayName("When getAvailableRoles is called and a department filter is specified but no roles are available, then it should return an empty list")
   public void testGetAvailableRolesByDeptEmptyList200() {
+    EmployeeController controller = new EmployeeController();
+    controller.employeeBusinessService = employeeBusinessService;
+
     Roles role1 = new Roles();
     role1.setRoleId(123L);
     role1.setRoleName("Database Administrator");
@@ -208,20 +221,18 @@ public class EmployeeControllerTest {
     List<Roles> result = employeeBusinessService.getAvailableRolesByDepartment(
         Departments.ARCHITECTURE);
 
-    when(employeeBusinessService.getAvailableRolesByDepartment(
-        Departments.ARCHITECTURE)).thenReturn(result);
+    when(controller.getAvailableRolesByDepartment(
+        Departments.ARCHITECTURE)).thenReturn(roles);
     assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRolesByDepartment(
-            Departments.ARCHITECTURE));
-    assertDoesNotThrow(
-        () ->
-            employeeBusinessService.getAvailableRolesByDepartment(Departments.ARCHITECTURE)
-                .isEmpty());
+        () -> result.isEmpty());
   }
 
   @Test
   @DisplayName("When getAvailableRoles is called and a duration filter is specified, then it should return a list of available roles that match the duration filter")
   public void testGetAvailableRolesByDuration200() {
+    EmployeeController controller = new EmployeeController();
+    controller.employeeBusinessService = employeeBusinessService;
+
     Roles role1 = new Roles();
     role1.setRoleId(123L);
     role1.setRoleName("Engagement Manager");
@@ -254,30 +265,28 @@ public class EmployeeControllerTest {
     roles.add(role2);
     roles.add(role3);
 
-    List<Roles> result = employeeBusinessService.getAvailableRolesByDuration(
+    when(employeeBusinessService.getAvailableRolesByDuration(Duration.NINE_MONTHS)).thenReturn(
+        roles);
+
+    List<Roles> result = controller.getAvailableRolesByDuration(
         Duration.NINE_MONTHS);
 
-    when(employeeBusinessService.getAvailableRolesByDuration(Duration.NINE_MONTHS)).thenReturn(
-        result);
     assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRolesByDuration(Duration.NINE_MONTHS));
+        () -> controller.getAvailableRolesByDuration(Duration.NINE_MONTHS));
     assertDoesNotThrow(
-        () ->
-            employeeBusinessService.getAvailableRolesByDuration(Duration.NINE_MONTHS)
-                .size() == 2);
+        () -> result.size() == 2);
     assertDoesNotThrow(
-        () ->
-            employeeBusinessService.getAvailableRolesByDuration(Duration.NINE_MONTHS)
-                .contains(role2));
+        () -> result.contains(role2));
     assertDoesNotThrow(
-        () ->
-            employeeBusinessService.getAvailableRolesByDuration(Duration.NINE_MONTHS)
-                .contains(role3));
+        () -> result.contains(role3));
   }
 
   @Test
   @DisplayName("When getAvailableRoles is called and a duration filter is specified but no roles are available, then it should return an empty list")
   public void testGetAvailableRolesByDurationEmptyList200() {
+    EmployeeController controller = new EmployeeController();
+    controller.employeeBusinessService = employeeBusinessService;
+
     Roles role1 = new Roles();
     role1.setRoleId(123L);
     role1.setRoleName("Database Administrator");
@@ -300,21 +309,24 @@ public class EmployeeControllerTest {
     roles.add(role1);
     roles.add(role2);
 
-    List<Roles> result = employeeBusinessService.getAvailableRolesByDuration(
+    when(employeeBusinessService.getAvailableRolesByDuration(Duration.TWELVE_MONTHS)).thenReturn(
+        roles);
+
+    List<Roles> result = controller.getAvailableRolesByDuration(
         Duration.TWELVE_MONTHS);
 
-    when(employeeBusinessService.getAvailableRolesByDuration(Duration.TWELVE_MONTHS)).thenReturn(
-        result);
     assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRolesByDuration(Duration.TWELVE_MONTHS));
+        () -> controller.getAvailableRolesByDuration(Duration.TWELVE_MONTHS));
     assertDoesNotThrow(
-        () ->
-            employeeBusinessService.getAvailableRolesByDuration(Duration.NINE_MONTHS).isEmpty());
+        () -> result.isEmpty());
   }
 
   @Test
   @DisplayName("When getAvailableRoles is called and a grade and duration filter is specified, then it should return a list of available roles that match the filters")
   public void testGetAvailableRolesByMultiFilter200() {
+    EmployeeController controller = new EmployeeController();
+    controller.employeeBusinessService = employeeBusinessService;
+
     Roles role1 = new Roles();
     role1.setRoleId(123L);
     role1.setRoleName("Engagement Manager");
@@ -347,32 +359,29 @@ public class EmployeeControllerTest {
     roles.add(role2);
     roles.add(role3);
 
-    List<Roles> result = employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3,
+    when(employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3, null,
+        Duration.NINE_MONTHS)).thenReturn(roles);
+
+    List<Roles> result = controller.getAvailableRolesByMultiFilters(Grades.GRADE_3,
         null, Duration.NINE_MONTHS);
 
-    when(employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3, null,
-        Duration.NINE_MONTHS)).thenReturn(result);
     assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3, null,
+        () -> controller.getAvailableRolesByMultiFilters(Grades.GRADE_3, null,
             Duration.NINE_MONTHS));
     assertDoesNotThrow(
-        () ->
-            employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3, null,
-                    Duration.NINE_MONTHS)
-                .size() == 2);
+        () -> result.size() == 2);
     assertDoesNotThrow(
-        () ->
-            employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3, null,
-                Duration.NINE_MONTHS).contains(role2));
+        () -> result.contains(role2));
     assertDoesNotThrow(
-        () ->
-            employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3, null,
-                Duration.NINE_MONTHS).contains(role3));
+        () -> result.contains(role3));
   }
 
   @Test
   @DisplayName("When getAvailableRoles is called and a department and duration filter is specified but no roles are available, then it should return an empty list")
   public void testGetAvailableRolesByMultiFilterEmptyList200() {
+    EmployeeController controller = new EmployeeController();
+    controller.employeeBusinessService = employeeBusinessService;
+
     Roles role1 = new Roles();
     role1.setRoleId(123L);
     role1.setRoleName("Engagement Manager");
@@ -405,17 +414,57 @@ public class EmployeeControllerTest {
     roles.add(role2);
     roles.add(role3);
 
-    List<Roles> result = employeeBusinessService.getAvailableRolesByMultiFilters(null,
+    when(employeeBusinessService.getAvailableRolesByMultiFilters(null,
+        Departments.ARCHITECTURE, Duration.TWELVE_MONTHS)).thenReturn(roles);
+
+    List<Roles> result = controller.getAvailableRolesByMultiFilters(null,
         Departments.ARCHITECTURE, Duration.TWELVE_MONTHS);
 
-    when(employeeBusinessService.getAvailableRolesByMultiFilters(null,
-        Departments.ARCHITECTURE, Duration.TWELVE_MONTHS)).thenReturn(result);
     assertDoesNotThrow(
-        () -> employeeBusinessService.getAvailableRolesByMultiFilters(null,
+        () -> controller.getAvailableRolesByMultiFilters(null,
             Departments.ARCHITECTURE, Duration.TWELVE_MONTHS));
     assertDoesNotThrow(
-        () ->
-            employeeBusinessService.getAvailableRolesByMultiFilters(null,
-                Departments.ARCHITECTURE, Duration.TWELVE_MONTHS).isEmpty());
+        () -> result.isEmpty());
+  }
+
+  @Test
+  @DisplayName("When getRoleDetails is called with a valid role ID, then it should return the details of the role")
+  public void testGetRoleDetails200() {
+    EmployeeController controller = new EmployeeController();
+    controller.employeeBusinessService = employeeBusinessService;
+
+    Roles role = new Roles();
+    role.setRoleId(123L);
+    role.setRoleName("Scala Developer");
+    role.setDepartment(Departments.DEVELOPMENT);
+    role.setDuration(Duration.TWELVE_MONTHS);
+    role.setGradeRequired(Grades.GRADE_5);
+    role.setJobDescription("JOB_DESCRIPTION");
+    role.setStaffingManagerEmailAddress("test123@example.com");
+
+    when(employeeBusinessService.getRoleDetails(123L)).thenReturn(role);
+
+    Roles result = controller.getRoleDetails(123L);
+
+    assertDoesNotThrow(
+        () -> controller.getRoleDetails(123L));
+    assertDoesNotThrow(() -> result.equals(role) &&
+        result.getRoleName().equals("Scala Developer") &&
+        result.getDepartment() == Departments.DEVELOPMENT
+        &&
+        result.getDuration() == Duration.TWELVE_MONTHS &&
+        result.getGradeRequired() == Grades.GRADE_5 &&
+        result.getStaffingManagerEmailAddress()
+            .equals("test123@example.com"));
+  }
+
+  @Test
+  @DisplayName("When getRoleDetails is called with a null RoleId, then it throw an BadRequestException")
+  public void testGetRoleDetailsNullRoleId200() {
+    EmployeeController controller = new EmployeeController();
+    controller.employeeBusinessService = employeeBusinessService;
+
+    when(employeeBusinessService.getRoleDetails(null)).thenThrow(BadRequestException.class);
+    assertThrows(BadRequestException.class, () -> controller.getRoleDetails(null));
   }
 }

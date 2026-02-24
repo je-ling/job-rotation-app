@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RoleInformationDto {
 
-  private String roleId;
+  private Long roleId;
   private String roleName;
   private String gradeRequired;
   private String staffingManagerEmailAddress;

@@ -30,7 +30,7 @@ public class EmployeeController {
   }
 
   @GetMapping("/list-available-roles/{department}")
-  public List<Roles> getAvailableRolesByGrade(Departments department) {
+  public List<Roles> getAvailableRolesByDepartment(Departments department) {
     return employeeBusinessService.getAvailableRolesByDepartment(department);
   }
 
@@ -45,5 +45,10 @@ public class EmployeeController {
       @RequestParam(required = false) Departments department,
       @RequestParam(required = false) Duration duration) {
     return employeeBusinessService.getAvailableRolesByMultiFilters(grade, department, duration);
+  }
+
+  @GetMapping("/available-roles/{roleId}")
+  public Roles getRoleDetails(@RequestParam Long roleId) {
+    return employeeBusinessService.getRoleDetails(roleId);
   }
 }

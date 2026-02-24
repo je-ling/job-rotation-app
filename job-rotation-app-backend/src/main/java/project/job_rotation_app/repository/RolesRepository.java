@@ -14,4 +14,8 @@ public interface RolesRepository extends JpaRepository<Roles, Long> {
   List<Roles> findByDepartmentRequired(Departments departments);
 
   List<Roles> findByDurationSpecified(Duration duration);
+
+  Roles findByRoleId(Long roleId);
+
+  List<Roles> findAllRoles();
 }
