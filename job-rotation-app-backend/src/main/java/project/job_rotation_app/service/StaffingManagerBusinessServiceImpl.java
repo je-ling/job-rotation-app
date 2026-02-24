@@ -9,18 +9,18 @@ import project.job_rotation_app.repository.RolesRepository;
 @Service
 public class StaffingManagerBusinessServiceImpl {
 
-    @Autowired
-    RolesRepository rolesRepository;
+  @Autowired
+  RolesRepository rolesRepository;
 
-    public Roles createRole(Roles role) {
-        if(role.getRoleName().isEmpty() ||
-            role.getDepartment() == null ||
-            role.getJobDescription().isEmpty() ||
-            role.getDuration().isEmpty() ||
-            role.getGradeRequired() == null ||
-            role.getStaffingManagerEmailAddress().isEmpty()) {
-            throw new BadRequestException("Required fields of create role request cannot be empty");
-        }
-        return rolesRepository.save(role);
+  public Roles createRole(Roles role) {
+    if (role.getRoleName().isEmpty() ||
+        role.getDepartment() == null ||
+        role.getJobDescription().isEmpty() ||
+        role.getDuration() == null ||
+        role.getGradeRequired() == null ||
+        role.getStaffingManagerEmailAddress().isEmpty()) {
+      throw new BadRequestException("Required fields of create role request cannot be empty");
     }
+    return rolesRepository.save(role);
+  }
 }

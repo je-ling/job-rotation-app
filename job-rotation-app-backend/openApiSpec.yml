@@ -65,7 +65,7 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-  /employee/available-roles/{grade}:
+  /employee/list-available-roles/{grade}:
     get:
       tags:
         - Employee Actions
@@ -86,7 +86,7 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-  /employee/available-roles/{department}:
+  /employee/list-available-roles/{department}:
     get:
       tags:
         - Employee Actions
@@ -107,7 +107,7 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-  /employee/available-roles/{duration}:
+  /employee/list-available-roles/{duration}:
     get:
       tags:
         - Employee Actions

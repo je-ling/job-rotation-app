@@ -30,7 +30,10 @@ public class Roles {
   private Departments department;
 
   private String staffingManagerEmailAddress;
-  private String duration;
+
+  @Enumerated(EnumType.STRING)
+  private Duration duration;
+
   private String jobDescription;
 
 }

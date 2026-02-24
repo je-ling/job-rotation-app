@@ -10,8 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import project.job_rotation_app.exception.BadRequestException;
 import project.job_rotation_app.model.Departments;
+import project.job_rotation_app.model.Duration;
 import project.job_rotation_app.model.Grades;
 import project.job_rotation_app.model.Roles;
+import project.job_rotation_app.repository.RolesRepository;
 import project.job_rotation_app.service.StaffingManagerBusinessServiceImpl;
 
 @SpringBootTest
@@ -21,6 +23,9 @@ public class StaffingManagerTest {
   @MockitoBean
   StaffingManagerBusinessServiceImpl staffingManagerBusinessService;
 
+  @MockitoBean
+  RolesRepository rolesRepository;
+
   @Test
   @DisplayName("When createRole is called with the all required fields are given, then it should create a new role")
   public void testCreateRole201() {
@@ -28,7 +33,7 @@ public class StaffingManagerTest {
     role.setRoleId(123L);
     role.setRoleName("Java Developer");
     role.setDepartment(Departments.DEVELOPMENT);
-    role.setDuration("12 Months");
+    role.setDuration(Duration.TWELVE_MONTHS);
     role.setGradeRequired(Grades.GRADE_5);
     role.setJobDescription("JOB_DESCRIPTION");
     role.setStaffingManagerEmailAddress("test@example.com");
@@ -45,7 +50,7 @@ public class StaffingManagerTest {
     role.setRoleId(123L);
     role.setRoleName("Java Developer");
     role.setDepartment(Departments.DEVELOPMENT);
-    role.setDuration("12 Months");
+    role.setDuration(Duration.SIX_MONTHS);
     role.setGradeRequired(Grades.GRADE_5);
     role.setJobDescription("JOB_DESCRIPTION");
     role.setStaffingManagerEmailAddress("");
