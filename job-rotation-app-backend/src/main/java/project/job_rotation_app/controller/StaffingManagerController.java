@@ -2,6 +2,7 @@ package project.job_rotation_app.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -63,5 +64,10 @@ public class StaffingManagerController {
   @PutMapping("/update-role/{roleId}")
   public Roles updateRole(@RequestParam Long roleId, Roles updatedRole) {
     return staffingManagerBusinessService.updateRole(roleId, updatedRole);
+  }
+
+  @DeleteMapping("/delete-role/{roleId}")
+  public Boolean deleteRole(@RequestParam Long roleId) {
+    return staffingManagerBusinessService.deleteRole(roleId);
   }
 }

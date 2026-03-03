@@ -1,8 +1,11 @@
 package project.job_rotation_app.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -69,7 +72,7 @@ public class StaffingManagerBusinessServiceTest {
     assertThrows(BadRequestException.class, () -> staffingManagerBusinessService.createRole(role));
     verify(rolesRepository, never()).save(any());
   }
-  
+
   @Test
   @DisplayName("When updateRole gets called then it should update the role when all fields are valid and provided")
   void updateRoleWhenAllFieldsAreProvided200() {
@@ -260,4 +263,34 @@ public class StaffingManagerBusinessServiceTest {
     verify(rolesRepository, times(1)).findByRoleId(role.getRoleId());
   }
 
+  @Test
+  @DisplayName("When deleteRole is called with a valid roleId, it should delete the role and return true to indicate successful deletion")
+  void deleteRoleDeletesRoleWhenRoleIdIsPresentInSystem() {
+    Long roleId = 123L;
+    Roles existingRole = new Roles();
+    existingRole.setRoleId(roleId);
+
+    when(rolesRepository.findByRoleId(roleId)).thenReturn(existingRole);
+    doNothing().when(rolesRepository).delete(existingRole);
+
+    Boolean result = staffingManagerBusinessService.deleteRole(roleId);
+
+    assertTrue(result);
+    verify(rolesRepository, times(1)).findByRoleId(roleId);
+    verify(rolesRepository, times(1)).delete(existingRole);
+  }
+
+  @Test
+  @DisplayName("When deleteRole is called with an not present roleId, it should return false")
+  void deleteRoleReturnsFalseWhenRoleIdProvidedIsNotPresentInSystem() {
+    Long roleId = 123L;
+
+    when(rolesRepository.findByRoleId(roleId)).thenReturn(null);
+
+    Boolean result = staffingManagerBusinessService.deleteRole(roleId);
+
+    assertFalse(result);
+    verify(rolesRepository, times(1)).findByRoleId(roleId);
+    verify(rolesRepository, never()).delete(any());
+  }
 }

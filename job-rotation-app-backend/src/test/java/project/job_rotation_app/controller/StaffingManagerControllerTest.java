@@ -1,7 +1,9 @@
 package project.job_rotation_app.controller;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -35,46 +37,6 @@ public class StaffingManagerControllerTest {
 
   @MockitoBean
   private RolesRepository rolesRepository;
-
-  @Test
-  @DisplayName("When createRole is called with the all required fields are given, then it should create a new role")
-  public void testCreateRole201() {
-    StaffingManagerController controller = new StaffingManagerController();
-    controller.staffingManagerBusinessService = staffingManagerBusinessService;
-
-    Roles role = new Roles();
-    role.setRoleId(123L);
-    role.setRoleName("Java Developer");
-    role.setDepartment(Departments.DEVELOPMENT);
-    role.setDuration(Duration.TWELVE_MONTHS);
-    role.setGradeRequired(Grades.GRADE_5);
-    role.setJobDescription("JOB_DESCRIPTION");
-    role.setStaffingManagerEmailAddress("test@example.com");
-
-    Roles result = staffingManagerBusinessService.createRole(role);
-    when(staffingManagerBusinessService.createRole(role)).thenReturn(result);
-    assertDoesNotThrow(
-        () -> controller.createRole(role));
-  }
-
-  @Test
-  @DisplayName("When createRole is called with the required fields not provided, then it should throw a BadRequestException")
-  public void testCreateRole400() {
-    StaffingManagerController controller = new StaffingManagerController();
-    controller.staffingManagerBusinessService = staffingManagerBusinessService;
-
-    Roles role = new Roles();
-    role.setRoleId(123L);
-    role.setRoleName("Java Developer");
-    role.setDepartment(Departments.DEVELOPMENT);
-    role.setDuration(Duration.SIX_MONTHS);
-    role.setGradeRequired(Grades.GRADE_5);
-    role.setJobDescription("JOB_DESCRIPTION");
-    role.setStaffingManagerEmailAddress("");
-
-    when(staffingManagerBusinessService.createRole(role)).thenThrow(BadRequestException.class);
-    assertThrows(BadRequestException.class, () -> controller.createRole(role));
-  }
 
   @Test
   @DisplayName("When getAvailableRoles endpoint is called, then it should return a list of available roles")
@@ -520,6 +482,46 @@ public class StaffingManagerControllerTest {
   }
 
   @Test
+  @DisplayName("When createRole is called with the all required fields are given, then it should create a new role")
+  public void testCreateRole201() {
+    StaffingManagerController controller = new StaffingManagerController();
+    controller.staffingManagerBusinessService = staffingManagerBusinessService;
+
+    Roles role = new Roles();
+    role.setRoleId(123L);
+    role.setRoleName("Java Developer");
+    role.setDepartment(Departments.DEVELOPMENT);
+    role.setDuration(Duration.TWELVE_MONTHS);
+    role.setGradeRequired(Grades.GRADE_5);
+    role.setJobDescription("JOB_DESCRIPTION");
+    role.setStaffingManagerEmailAddress("test@example.com");
+
+    Roles result = staffingManagerBusinessService.createRole(role);
+    when(staffingManagerBusinessService.createRole(role)).thenReturn(result);
+    assertDoesNotThrow(
+        () -> controller.createRole(role));
+  }
+
+  @Test
+  @DisplayName("When createRole is called with the required fields not provided, then it should throw a BadRequestException")
+  public void testCreateRole400() {
+    StaffingManagerController controller = new StaffingManagerController();
+    controller.staffingManagerBusinessService = staffingManagerBusinessService;
+
+    Roles role = new Roles();
+    role.setRoleId(123L);
+    role.setRoleName("Java Developer");
+    role.setDepartment(Departments.DEVELOPMENT);
+    role.setDuration(Duration.SIX_MONTHS);
+    role.setGradeRequired(Grades.GRADE_5);
+    role.setJobDescription("JOB_DESCRIPTION");
+    role.setStaffingManagerEmailAddress("");
+
+    when(staffingManagerBusinessService.createRole(role)).thenThrow(BadRequestException.class);
+    assertThrows(BadRequestException.class, () -> controller.createRole(role));
+  }
+
+  @Test
   @DisplayName("When updateRole is called with a valid role ID and all required fields are given, then it should update the role details in the system")
   public void testUpdateRole200() {
     StaffingManagerController controller = new StaffingManagerController();
@@ -556,8 +558,28 @@ public class StaffingManagerControllerTest {
 
     when(staffingManagerBusinessService.updateRole(123L, role)).thenThrow(
         BadRequestException.class);
-    
+
     assertThrows(BadRequestException.class, () -> controller.updateRole(123L, role));
   }
 
+  @Test
+  @DisplayName("When deleteRole is called with a valid role ID, then it should delete the role from the system and return true")
+  public void testDeleteRoleTrue() {
+    StaffingManagerController controller = new StaffingManagerController();
+    controller.staffingManagerBusinessService = staffingManagerBusinessService;
+
+    when(staffingManagerBusinessService.deleteRole(123L)).thenReturn(true);
+    assertDoesNotThrow(() -> controller.deleteRole(123L));
+    assertTrue(controller.deleteRole(123L));
+  }
+
+  @Test
+  @DisplayName("When deleteRole is called with a role ID that is not present in the system, then it return false")
+  public void testDeleteRoleFalse() {
+    StaffingManagerController controller = new StaffingManagerController();
+    controller.staffingManagerBusinessService = staffingManagerBusinessService;
+
+    when(staffingManagerBusinessService.deleteRole(125L)).thenReturn(false);
+    assertFalse(controller.deleteRole(123L));
+  }
 }

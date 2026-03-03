@@ -89,4 +89,14 @@ public class StaffingManagerBusinessServiceImpl {
 
     return rolesRepository.save(existingRole);
   }
+
+  public Boolean deleteRole(Long roleId) {
+    Roles existingRole = rolesRepository.findByRoleId(roleId);
+    if (existingRole == null || !existingRole.getRoleId().equals(roleId)) {
+      return false;
+    }
+
+    rolesRepository.delete(existingRole);
+    return true;
+  }
 }
