@@ -16,6 +16,7 @@ import project.job_rotation_app.model.Duration;
 import project.job_rotation_app.model.Grades;
 import project.job_rotation_app.model.Roles;
 import project.job_rotation_app.repository.RolesRepository;
+import project.job_rotation_app.repository.StaffingManagerRepository;
 import project.job_rotation_app.service.EmployeeBusinessServiceImpl;
 
 @SpringBootTest
@@ -26,7 +27,13 @@ public class EmployeeControllerTest {
   private EmployeeBusinessServiceImpl employeeBusinessService;
 
   @MockitoBean
-  RolesRepository rolesRepository;
+  private AuthController authController;
+
+  @MockitoBean
+  private StaffingManagerRepository staffingManagerRepository;
+
+  @MockitoBean
+  private RolesRepository rolesRepository;
 
   @Test
   @DisplayName("When getAvailableRoles endpoint is called, then it should return a list of available roles")

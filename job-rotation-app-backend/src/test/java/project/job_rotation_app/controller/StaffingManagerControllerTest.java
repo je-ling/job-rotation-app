@@ -16,6 +16,8 @@ import project.job_rotation_app.model.Duration;
 import project.job_rotation_app.model.Grades;
 import project.job_rotation_app.model.Roles;
 import project.job_rotation_app.repository.RolesRepository;
+import project.job_rotation_app.repository.StaffingManagerRepository;
+import project.job_rotation_app.service.AuthBusinessServiceImpl;
 import project.job_rotation_app.service.StaffingManagerBusinessServiceImpl;
 
 @SpringBootTest
@@ -23,10 +25,16 @@ import project.job_rotation_app.service.StaffingManagerBusinessServiceImpl;
 public class StaffingManagerControllerTest {
 
   @MockitoBean
-  StaffingManagerBusinessServiceImpl staffingManagerBusinessService;
+  private StaffingManagerBusinessServiceImpl staffingManagerBusinessService;
 
   @MockitoBean
-  RolesRepository rolesRepository;
+  private AuthBusinessServiceImpl authBusinessService;
+
+  @MockitoBean
+  private StaffingManagerRepository staffingManagerRepository;
+
+  @MockitoBean
+  private RolesRepository rolesRepository;
 
   @Test
   @DisplayName("When createRole is called with the all required fields are given, then it should create a new role")
