@@ -71,6 +71,72 @@ public class StaffingManagerBusinessServiceTest {
   }
 
   @Test
+  @DisplayName("When getAvailableRoles is called then it should return all available roles")
+  void getAvailableRolesReturnsAllAvaRoles200() {
+    List<Roles> roles = new ArrayList<>();
+    Roles role = new Roles();
+    roles.add(role);
+
+    when(rolesRepository.findAllRoles()).thenReturn(roles);
+
+    List<Roles> result = staffingManagerBusinessService.getAvailableRoles();
+
+    assertEquals(roles, result);
+    verify(rolesRepository, times(1)).findAllRoles();
+  }
+
+  @Test
+  @DisplayName("When getAvailableRolesByGrade is called then it should return roles matching the specified grade")
+  void getAvailableRolesByGrade200() {
+    Grades grade = Grades.GRADE_5;
+    List<Roles> roles = new ArrayList<>();
+    Roles role = new Roles();
+    role.setGradeRequired(grade);
+    roles.add(role);
+
+    when(rolesRepository.findByGradeRequired(grade)).thenReturn(roles);
+
+    List<Roles> result = staffingManagerBusinessService.getAvailableRolesByGrade(grade);
+
+    assertEquals(roles, result);
+    verify(rolesRepository, times(1)).findByGradeRequired(grade);
+  }
+
+  @Test
+  @DisplayName("When getAvailableRolesByDepartment gets called then it should return available roles matching the specified department")
+  void getAvailableRolesByDepartmentReturnsFilteredRoles() {
+    Departments department = Departments.DEVELOPMENT;
+    List<Roles> roles = new ArrayList<>();
+    Roles role = new Roles();
+    role.setDepartment(department);
+    roles.add(role);
+
+    when(rolesRepository.findByDepartmentRequired(department)).thenReturn(roles);
+
+    List<Roles> result = staffingManagerBusinessService.getAvailableRolesByDepartment(department);
+
+    assertEquals(roles, result);
+    verify(rolesRepository, times(1)).findByDepartmentRequired(department);
+  }
+
+  @Test
+  @DisplayName("When getAvailableRolesByDuration is called then it should return roles matching the specified duration")
+  void getAvailableRolesByDurationReturnsFilteredRoles() {
+    Duration duration = Duration.THREE_MONTHS;
+    List<Roles> roles = new ArrayList<>();
+    Roles role = new Roles();
+    role.setDuration(duration);
+    roles.add(role);
+
+    when(rolesRepository.findByDurationSpecified(duration)).thenReturn(roles);
+
+    List<Roles> result = staffingManagerBusinessService.getAvailableRolesByDuration(duration);
+
+    assertEquals(roles, result);
+    verify(rolesRepository, times(1)).findByDurationSpecified(duration);
+  }
+
+  @Test
   @DisplayName("When getAvailableRolesByMultiFilters is called then it should return roles matching all specified filters")
   void getAvailableRolesByMultiFiltersReturnsFilteredRoles() {
     Departments department = Departments.DEVELOPMENT;

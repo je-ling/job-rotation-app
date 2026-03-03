@@ -87,6 +87,5 @@ public class AuthControllerTest {
     ResponseEntity<?> response = authController.loginStaffingManager(loginDetails);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-//    assertEquals("{\"message\":\"Password cannot be empty.\"}", response.getBody());
   }
 }

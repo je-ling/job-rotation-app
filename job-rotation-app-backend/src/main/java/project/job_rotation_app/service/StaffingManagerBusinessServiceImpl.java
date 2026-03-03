@@ -18,6 +18,22 @@ public class StaffingManagerBusinessServiceImpl {
   @Autowired
   RolesRepository rolesRepository;
 
+  public List<Roles> getAvailableRoles() {
+    return rolesRepository.findAllRoles();
+  }
+
+  public List<Roles> getAvailableRolesByGrade(Grades grade) {
+    return rolesRepository.findByGradeRequired(grade);
+  }
+
+  public List<Roles> getAvailableRolesByDepartment(Departments department) {
+    return rolesRepository.findByDepartmentRequired(department);
+  }
+
+  public List<Roles> getAvailableRolesByDuration(Duration duration) {
+    return rolesRepository.findByDurationSpecified(duration);
+  }
+
   public Roles createRole(Roles role) {
     if (role.getRoleName().isEmpty() ||
         role.getDepartment() == null ||

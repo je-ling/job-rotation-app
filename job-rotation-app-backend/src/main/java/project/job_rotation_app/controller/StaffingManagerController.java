@@ -25,6 +25,26 @@ public class StaffingManagerController {
     return staffingManagerBusinessService.createRole(role);
   }
 
+  @GetMapping("/get-all-roles")
+  public List<Roles> getAvailableRoles() {
+    return staffingManagerBusinessService.getAvailableRoles();
+  }
+
+  @GetMapping("/list-available-roles/{grade}")
+  public List<Roles> getAvailableRolesByGrade(Grades grade) {
+    return staffingManagerBusinessService.getAvailableRolesByGrade(grade);
+  }
+
+  @GetMapping("/list-available-roles/{department}")
+  public List<Roles> getAvailableRolesByDepartment(Departments department) {
+    return staffingManagerBusinessService.getAvailableRolesByDepartment(department);
+  }
+
+  @GetMapping("/list-available-roles/{duration}")
+  public List<Roles> getAvailableRolesByDuration(Duration duration) {
+    return staffingManagerBusinessService.getAvailableRolesByDuration(duration);
+  }
+
   @GetMapping("/available-roles/{roleId}")
   public Roles getRoleDetails(@RequestParam Long roleId) {
     return staffingManagerBusinessService.getRoleDetails(roleId);
