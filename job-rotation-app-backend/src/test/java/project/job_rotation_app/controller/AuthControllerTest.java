@@ -1,5 +1,6 @@
 package project.job_rotation_app.controller;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -41,6 +42,7 @@ public class AuthControllerTest {
     ResponseEntity<?> response = authController.loginStaffingManager(loginDetails);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertDoesNotThrow(() -> authController.loginStaffingManager(loginDetails));
   }
 
   @Test
@@ -69,7 +71,6 @@ public class AuthControllerTest {
         ResponseEntity.badRequest().build());
 
     ResponseEntity<?> response = authController.loginStaffingManager(loginDetails);
-
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
   }
 

@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,11 +20,6 @@ public class StaffingManagerController {
 
   @Autowired
   StaffingManagerBusinessServiceImpl staffingManagerBusinessService;
-
-  @PostMapping("/create-role")
-  public Roles createRole(Roles role) {
-    return staffingManagerBusinessService.createRole(role);
-  }
 
   @GetMapping("/get-all-roles")
   public List<Roles> getAvailableRoles() {
@@ -57,5 +53,15 @@ public class StaffingManagerController {
       @RequestParam(required = false) Duration duration) {
     return staffingManagerBusinessService.getAvailableRolesByMultiFilters(grade, department,
         duration);
+  }
+
+  @PostMapping("/create-role")
+  public Roles createRole(Roles role) {
+    return staffingManagerBusinessService.createRole(role);
+  }
+
+  @PutMapping("/update-role/{roleId}")
+  public Roles updateRole(@RequestParam Long roleId, Roles updatedRole) {
+    return staffingManagerBusinessService.updateRole(roleId, updatedRole);
   }
 }

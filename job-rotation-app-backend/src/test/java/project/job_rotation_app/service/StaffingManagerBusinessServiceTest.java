@@ -69,6 +69,79 @@ public class StaffingManagerBusinessServiceTest {
     assertThrows(BadRequestException.class, () -> staffingManagerBusinessService.createRole(role));
     verify(rolesRepository, never()).save(any());
   }
+  
+  @Test
+  @DisplayName("When updateRole gets called then it should update the role when all fields are valid and provided")
+  void updateRoleWhenAllFieldsAreProvided200() {
+    Roles existingRole = new Roles();
+    existingRole.setRoleId(123L);
+    existingRole.setRoleName("Developer");
+    existingRole.setDepartment(Departments.DEVELOPMENT);
+    existingRole.setJobDescription("Software Engineer");
+    existingRole.setDuration(Duration.THREE_MONTHS);
+    existingRole.setGradeRequired(Grades.GRADE_3);
+    existingRole.setStaffingManagerEmailAddress("test@example.com");
+
+    Roles updatedRole = new Roles();
+    updatedRole.setRoleId(123L);
+    updatedRole.setRoleName("Senior Developer");
+    updatedRole.setDepartment(Departments.DEVELOPMENT);
+    updatedRole.setJobDescription("Lead Software Engineer");
+    updatedRole.setDuration(Duration.SIX_MONTHS);
+    updatedRole.setGradeRequired(Grades.GRADE_5);
+    updatedRole.setStaffingManagerEmailAddress("test@example.com");
+
+    when(rolesRepository.findByRoleId(123L)).thenReturn(existingRole);
+    when(rolesRepository.save(existingRole)).thenReturn(existingRole);
+
+    Roles result = staffingManagerBusinessService.updateRole(123L, updatedRole);
+
+    assertEquals(updatedRole.getRoleName(), result.getRoleName());
+    assertEquals(updatedRole.getDepartment(), result.getDepartment());
+    assertEquals(updatedRole.getJobDescription(), result.getJobDescription());
+    assertEquals(updatedRole.getDuration(), result.getDuration());
+    assertEquals(updatedRole.getGradeRequired(), result.getGradeRequired());
+    assertEquals(updatedRole.getStaffingManagerEmailAddress(),
+        result.getStaffingManagerEmailAddress());
+    verify(rolesRepository, times(1)).findByRoleId(123L);
+    verify(rolesRepository, times(1)).save(existingRole);
+  }
+
+  @Test
+  @DisplayName("When updateRole gets called but not all fields are provided then it should throw BadRequestException")
+  void updateRoleWhenAllFieldsAreNotProvided400() {
+    Roles role = new Roles();
+    role.setRoleId(123L);
+    role.setRoleName("");
+    role.setDepartment(null);
+    role.setJobDescription("");
+    role.setDuration(null);
+    role.setGradeRequired(null);
+    role.setStaffingManagerEmailAddress("");
+
+    assertThrows(BadRequestException.class,
+        () -> staffingManagerBusinessService.updateRole(123L, role));
+    verify(rolesRepository, never()).save(any());
+  }
+
+  @Test
+  @DisplayName("When updateRole gets called then it should throw BadRequestException if role with provided ID does not exist")
+  void updateRoleThrowsExceptionWhenRoleIdNotFound404() {
+    Roles roleUpdate = new Roles();
+    roleUpdate.setRoleId(123L);
+    roleUpdate.setRoleName(".NET Developer");
+    roleUpdate.setDepartment(Departments.DEVELOPMENT);
+    roleUpdate.setJobDescription("Software Engineer");
+    roleUpdate.setDuration(Duration.THREE_MONTHS);
+    roleUpdate.setGradeRequired(Grades.GRADE_3);
+    roleUpdate.setStaffingManagerEmailAddress("test@example.com");
+
+    when(rolesRepository.findByRoleId(123L)).thenReturn(null);
+
+    assertThrows(BadRequestException.class,
+        () -> staffingManagerBusinessService.updateRole(123L, roleUpdate));
+    verify(rolesRepository, never()).save(any());
+  }
 
   @Test
   @DisplayName("When getAvailableRoles is called then it should return all available roles")

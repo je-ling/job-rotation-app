@@ -34,18 +34,6 @@ public class StaffingManagerBusinessServiceImpl {
     return rolesRepository.findByDurationSpecified(duration);
   }
 
-  public Roles createRole(Roles role) {
-    if (role.getRoleName().isEmpty() ||
-        role.getDepartment() == null ||
-        role.getJobDescription().isEmpty() ||
-        role.getDuration() == null ||
-        role.getGradeRequired() == null ||
-        role.getStaffingManagerEmailAddress().isEmpty()) {
-      throw new BadRequestException("Required fields of create role request cannot be empty");
-    }
-    return rolesRepository.save(role);
-  }
-
   public List<Roles> getAvailableRolesByMultiFilters(Grades grade, Departments department,
       Duration duration) {
     return rolesRepository.findAllRoles().stream()
@@ -74,4 +62,31 @@ public class StaffingManagerBusinessServiceImpl {
     return role;
   }
 
+  public Roles createRole(Roles role) {
+    if (role.getRoleName().isEmpty() ||
+        role.getDepartment() == null ||
+        role.getJobDescription().isEmpty() ||
+        role.getDuration() == null ||
+        role.getGradeRequired() == null ||
+        role.getStaffingManagerEmailAddress().isEmpty()) {
+      throw new BadRequestException("Required fields of create role request cannot be empty");
+    }
+    return rolesRepository.save(role);
+  }
+
+  public Roles updateRole(Long roleId, Roles updatedRole) {
+    Roles existingRole = rolesRepository.findByRoleId(roleId);
+    if (existingRole == null || !existingRole.getRoleId().equals(roleId)) {
+      throw new BadRequestException("Role with the provided ID does not exist in the system");
+    }
+
+    existingRole.setRoleName(updatedRole.getRoleName());
+    existingRole.setDepartment(updatedRole.getDepartment());
+    existingRole.setJobDescription(updatedRole.getJobDescription());
+    existingRole.setDuration(updatedRole.getDuration());
+    existingRole.setGradeRequired(updatedRole.getGradeRequired());
+    existingRole.setStaffingManagerEmailAddress(updatedRole.getStaffingManagerEmailAddress());
+
+    return rolesRepository.save(existingRole);
+  }
 }

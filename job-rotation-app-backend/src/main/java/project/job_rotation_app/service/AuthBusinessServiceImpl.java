@@ -27,15 +27,16 @@ public class AuthBusinessServiceImpl {
   }
 
   public ResponseEntity<?> verifyLoginCredentials(LoginReqBody userDetails) {
-    if (userDetails == null || userDetails.getEmail() == null
-        || userDetails.getPassword() == null) {
+    if (userDetails == null || userDetails.getEmail() == null ||
+        userDetails.getPassword() == null || userDetails.getEmail().isEmpty()
+        || userDetails.getPassword().isEmpty()) {
       return ResponseEntity.badRequest().body("Email and password must be provided");
     }
     if (validateLogin(userDetails)) {
       return ResponseEntity.ok().build();
     } else {
       return ResponseEntity.status(401).body("Invalid email or password");
-      // unauthorised status
+      // unauthorised status returned
     }
   }
 }

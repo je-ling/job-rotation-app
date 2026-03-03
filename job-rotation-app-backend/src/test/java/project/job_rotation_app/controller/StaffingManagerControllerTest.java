@@ -518,4 +518,46 @@ public class StaffingManagerControllerTest {
     assertThrows(BadRequestException.class,
         () -> controller.getRoleDetails(null));
   }
+
+  @Test
+  @DisplayName("When updateRole is called with a valid role ID and all required fields are given, then it should update the role details in the system")
+  public void testUpdateRole200() {
+    StaffingManagerController controller = new StaffingManagerController();
+    controller.staffingManagerBusinessService = staffingManagerBusinessService;
+
+    Roles role = new Roles();
+    role.setRoleId(123L);
+    role.setRoleName("Scala Developer");
+    role.setDepartment(Departments.DEVELOPMENT);
+    role.setDuration(Duration.TWELVE_MONTHS);
+    role.setGradeRequired(Grades.GRADE_5);
+    role.setJobDescription("JOB_DESCRIPTION");
+    role.setStaffingManagerEmailAddress("test@example.com");
+
+    when(staffingManagerBusinessService.updateRole(123L, role)).thenReturn(role);
+    assertDoesNotThrow(() -> controller.updateRole(123L, role));
+
+  }
+
+  @Test
+  @DisplayName("When updateRole is called with a valid role ID and but not all required fields are given, then it should return a HTTP 400 bad request error")
+  public void testUpdateRole400() {
+    StaffingManagerController controller = new StaffingManagerController();
+    controller.staffingManagerBusinessService = staffingManagerBusinessService;
+
+    Roles role = new Roles();
+    role.setRoleId(123L);
+    role.setRoleName("Scala Developer");
+    role.setDepartment(Departments.DEVELOPMENT);
+    role.setDuration(Duration.TWELVE_MONTHS);
+    role.setGradeRequired(Grades.GRADE_5);
+    role.setJobDescription("JOB_DESCRIPTION");
+    role.setStaffingManagerEmailAddress("");
+
+    when(staffingManagerBusinessService.updateRole(123L, role)).thenThrow(
+        BadRequestException.class);
+    
+    assertThrows(BadRequestException.class, () -> controller.updateRole(123L, role));
+  }
+
 }
