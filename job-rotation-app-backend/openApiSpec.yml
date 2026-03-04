@@ -50,10 +50,10 @@ components:
         jobDescription:
           type: string
 paths:
-  /landing/available-roles:
+  /employee/list-available-roles:
     get:
       tags:
-        - Employee Landing Page
+        - Employee Actions
       responses:
         '200':
           description: OK
@@ -65,10 +65,10 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-  /landing/available-roles/{grade}:
+  /employee/list-available-roles/{grade}:
     get:
       tags:
-        - Employee Landing Page
+        - Employee Actions
       parameters:
         - name: grade
           in: path
@@ -86,10 +86,10 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-  /landing/available-roles/{department}:
+  /employee/list-available-roles/{department}:
     get:
       tags:
-        - Employee Landing Page
+        - Employee Actions
       parameters:
         - name: department
           in: path
@@ -107,10 +107,10 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-  /landing/available-roles/{duration}:
+  /employee/list-available-roles/{duration}:
     get:
       tags:
-        - Employee Landing Page
+        - Employee Actions
       parameters:
         - name: duration
           in: path
@@ -128,7 +128,38 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-  /landing/available-roles/{roleId}:
+  /employee/available-roles/filter:
+    get:
+      tags:
+        - Employee Actions
+      parameters:
+        - name: grade
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: department
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: duration
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAllRolesResponse'
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+  /employee/available-roles/{roleId}:
     get:
       tags:
         - Role Information
@@ -194,7 +225,7 @@ paths:
   /staffing-manager/available-roles/{grade}:
     get:
       tags:
-        - Staffing Manager Actions  
+        - Staffing Manager Actions
       parameters:
         - name: grade
           in: path
@@ -228,7 +259,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListAllRolesResponse'          
+                $ref: '#/components/schemas/ListAllRolesResponse'
         '400':
           description: Bad Request
         '500':
@@ -249,7 +280,38 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListAllRolesResponse'  
+                $ref: '#/components/schemas/ListAllRolesResponse'
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+  /staffing-manager/available-roles/filter:
+    get:
+      tags:
+        - Staffing Manager Actions
+      parameters:
+        - name: grade
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: department
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: duration
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAllRolesResponse'
         '400':
           description: Bad Request
         '500':
@@ -367,7 +429,7 @@ paths:
             type: string
       responses:
         '200':
-          description: OK 
+          description: OK
         '400':
           description: Bad Request
         '500':
