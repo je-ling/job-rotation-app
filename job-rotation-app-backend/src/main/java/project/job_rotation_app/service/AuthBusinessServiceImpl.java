@@ -16,19 +16,19 @@ public class AuthBusinessServiceImpl {
   private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
   public boolean validateLogin(LoginReqBody userDetails) {
-    if (userDetails == null || userDetails.getEmail() == null
+    if (userDetails == null || userDetails.getEmailAddress() == null
         || userDetails.getPassword() == null) {
       return false;
     }
 
-    return staffingManagerRepository.findByEmail(userDetails.getEmail())
+    return staffingManagerRepository.findByEmail(userDetails.getEmailAddress())
         .map(user -> encoder.matches(userDetails.getPassword(), user.getPassword()))
         .orElse(false);
   }
 
   public ResponseEntity<?> verifyLoginCredentials(LoginReqBody userDetails) {
-    if (userDetails == null || userDetails.getEmail() == null ||
-        userDetails.getPassword() == null || userDetails.getEmail().isEmpty()
+    if (userDetails == null || userDetails.getEmailAddress() == null ||
+        userDetails.getPassword() == null || userDetails.getEmailAddress().isEmpty()
         || userDetails.getPassword().isEmpty()) {
       return ResponseEntity.badRequest().body("Email and password must be provided");
     }

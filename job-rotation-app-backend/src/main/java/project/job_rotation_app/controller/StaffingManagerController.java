@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,22 +29,22 @@ public class StaffingManagerController {
   }
 
   @GetMapping("/list-available-roles/{grade}")
-  public List<Roles> getAvailableRolesByGrade(Grades grade) {
+  public List<Roles> getAvailableRolesByGrade(@PathVariable Grades grade) {
     return staffingManagerBusinessService.getAvailableRolesByGrade(grade);
   }
 
   @GetMapping("/list-available-roles/{department}")
-  public List<Roles> getAvailableRolesByDepartment(Departments department) {
+  public List<Roles> getAvailableRolesByDepartment(@PathVariable Departments department) {
     return staffingManagerBusinessService.getAvailableRolesByDepartment(department);
   }
 
   @GetMapping("/list-available-roles/{duration}")
-  public List<Roles> getAvailableRolesByDuration(Duration duration) {
+  public List<Roles> getAvailableRolesByDuration(@PathVariable Duration duration) {
     return staffingManagerBusinessService.getAvailableRolesByDuration(duration);
   }
 
   @GetMapping("/available-roles/{roleId}")
-  public Roles getRoleDetails(@RequestParam Long roleId) {
+  public Roles getRoleDetails(@PathVariable Long roleId) {
     return staffingManagerBusinessService.getRoleDetails(roleId);
   }
 
@@ -62,12 +63,12 @@ public class StaffingManagerController {
   }
 
   @PutMapping("/update-role/{roleId}")
-  public Roles updateRole(@RequestParam Long roleId, Roles updatedRole) {
+  public Roles updateRole(@PathVariable Long roleId, Roles updatedRole) {
     return staffingManagerBusinessService.updateRole(roleId, updatedRole);
   }
 
   @DeleteMapping("/delete-role/{roleId}")
-  public Boolean deleteRole(@RequestParam Long roleId) {
+  public Boolean deleteRole(@PathVariable Long roleId) {
     return staffingManagerBusinessService.deleteRole(roleId);
   }
 }

@@ -6,5 +6,5 @@ import project.job_rotation_app.model.StaffingManagerUser;
 
 public interface StaffingManagerRepository extends JpaRepository<StaffingManagerUser, String> {
 
-  Optional<StaffingManagerUser> findByEmail(String email);
+  Optional<StaffingManagerUser> findByEmail(String emailAddress);
 }

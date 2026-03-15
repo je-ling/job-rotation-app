@@ -43,9 +43,9 @@ public class AuthBusinessServiceTest {
   void verifyLoginCredentialsReturnsOkForValidCredentials() {
     LoginReqBody userDetails = new LoginReqBody("test@example.com", "password123");
     StaffingManagerUser staffingManagerUser = new StaffingManagerUser();
-    staffingManagerUser.setEmailAddress(userDetails.getEmail());
+    staffingManagerUser.setEmailAddress(userDetails.getEmailAddress());
     staffingManagerUser.setPassword(new BCryptPasswordEncoder().encode(userDetails.getPassword()));
-    when(staffingManagerRepository.findByEmail(userDetails.getEmail())).thenReturn(
+    when(staffingManagerRepository.findByEmail(userDetails.getEmailAddress())).thenReturn(
         Optional.of(staffingManagerUser));
 
     ResponseEntity<?> response = authBusinessService.verifyLoginCredentials(userDetails);
@@ -58,9 +58,9 @@ public class AuthBusinessServiceTest {
   void verifyLoginCredentialsReturnsUnauthorizedForInvalidCredentials() {
     LoginReqBody userDetails = new LoginReqBody("test@example.com", "wrongPassword");
     StaffingManagerUser staffingManagerUser = new StaffingManagerUser();
-    staffingManagerUser.setEmailAddress(userDetails.getEmail());
+    staffingManagerUser.setEmailAddress(userDetails.getEmailAddress());
     staffingManagerUser.setPassword(new BCryptPasswordEncoder().encode("password123"));
-    when(staffingManagerRepository.findByEmail(userDetails.getEmail())).thenReturn(
+    when(staffingManagerRepository.findByEmail(userDetails.getEmailAddress())).thenReturn(
         Optional.of(staffingManagerUser));
 
     ResponseEntity<?> response = authBusinessService.verifyLoginCredentials(userDetails);
