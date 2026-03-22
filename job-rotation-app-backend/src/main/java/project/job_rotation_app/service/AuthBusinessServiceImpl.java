@@ -21,7 +21,7 @@ public class AuthBusinessServiceImpl {
       return false;
     }
 
-    return staffingManagerRepository.findByEmail(userDetails.getEmailAddress())
+    return staffingManagerRepository.findByEmailAddress(userDetails.getEmailAddress())
         .map(user -> encoder.matches(userDetails.getPassword(), user.getPassword()))
         .orElse(false);
   }

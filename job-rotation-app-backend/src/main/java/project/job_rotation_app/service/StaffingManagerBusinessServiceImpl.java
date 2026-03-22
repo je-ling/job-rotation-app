@@ -19,7 +19,7 @@ public class StaffingManagerBusinessServiceImpl {
   RolesRepository rolesRepository;
 
   public List<Roles> getAvailableRoles() {
-    return rolesRepository.findAllRoles();
+    return rolesRepository.findAll();
   }
 
   public List<Roles> getAvailableRolesByGrade(Grades grade) {
@@ -27,16 +27,16 @@ public class StaffingManagerBusinessServiceImpl {
   }
 
   public List<Roles> getAvailableRolesByDepartment(Departments department) {
-    return rolesRepository.findByDepartmentRequired(department);
+    return rolesRepository.findByDepartment(department);
   }
 
   public List<Roles> getAvailableRolesByDuration(Duration duration) {
-    return rolesRepository.findByDurationSpecified(duration);
+    return rolesRepository.findByDuration(duration);
   }
 
   public List<Roles> getAvailableRolesByMultiFilters(Grades grade, Departments department,
       Duration duration) {
-    return rolesRepository.findAllRoles().stream()
+    return rolesRepository.findAll().stream()
         .filter(r -> grade == null || r.getGradeRequired() == grade)
         .filter(r -> department == null || r.getDepartment() == department)
         .filter(r -> duration == null || r.getDuration() == duration)

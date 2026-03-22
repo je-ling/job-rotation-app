@@ -45,7 +45,7 @@ public class AuthBusinessServiceTest {
     StaffingManagerUser staffingManagerUser = new StaffingManagerUser();
     staffingManagerUser.setEmailAddress(userDetails.getEmailAddress());
     staffingManagerUser.setPassword(new BCryptPasswordEncoder().encode(userDetails.getPassword()));
-    when(staffingManagerRepository.findByEmail(userDetails.getEmailAddress())).thenReturn(
+    when(staffingManagerRepository.findByEmailAddress(userDetails.getEmailAddress())).thenReturn(
         Optional.of(staffingManagerUser));
 
     ResponseEntity<?> response = authBusinessService.verifyLoginCredentials(userDetails);
@@ -60,7 +60,7 @@ public class AuthBusinessServiceTest {
     StaffingManagerUser staffingManagerUser = new StaffingManagerUser();
     staffingManagerUser.setEmailAddress(userDetails.getEmailAddress());
     staffingManagerUser.setPassword(new BCryptPasswordEncoder().encode("password123"));
-    when(staffingManagerRepository.findByEmail(userDetails.getEmailAddress())).thenReturn(
+    when(staffingManagerRepository.findByEmailAddress(userDetails.getEmailAddress())).thenReturn(
         Optional.of(staffingManagerUser));
 
     ResponseEntity<?> response = authBusinessService.verifyLoginCredentials(userDetails);

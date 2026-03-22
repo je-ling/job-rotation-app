@@ -153,12 +153,12 @@ public class StaffingManagerBusinessServiceTest {
     Roles role = new Roles();
     roles.add(role);
 
-    when(rolesRepository.findAllRoles()).thenReturn(roles);
+    when(rolesRepository.findAll()).thenReturn(roles);
 
     List<Roles> result = staffingManagerBusinessService.getAvailableRoles();
 
     assertEquals(roles, result);
-    verify(rolesRepository, times(1)).findAllRoles();
+    verify(rolesRepository, times(1)).findAll();
   }
 
   @Test
@@ -187,12 +187,12 @@ public class StaffingManagerBusinessServiceTest {
     role.setDepartment(department);
     roles.add(role);
 
-    when(rolesRepository.findByDepartmentRequired(department)).thenReturn(roles);
+    when(rolesRepository.findByDepartment(department)).thenReturn(roles);
 
     List<Roles> result = staffingManagerBusinessService.getAvailableRolesByDepartment(department);
 
     assertEquals(roles, result);
-    verify(rolesRepository, times(1)).findByDepartmentRequired(department);
+    verify(rolesRepository, times(1)).findByDepartment(department);
   }
 
   @Test
@@ -204,12 +204,12 @@ public class StaffingManagerBusinessServiceTest {
     role.setDuration(duration);
     roles.add(role);
 
-    when(rolesRepository.findByDurationSpecified(duration)).thenReturn(roles);
+    when(rolesRepository.findByDuration(duration)).thenReturn(roles);
 
     List<Roles> result = staffingManagerBusinessService.getAvailableRolesByDuration(duration);
 
     assertEquals(roles, result);
-    verify(rolesRepository, times(1)).findByDurationSpecified(duration);
+    verify(rolesRepository, times(1)).findByDuration(duration);
   }
 
   @Test
@@ -225,14 +225,14 @@ public class StaffingManagerBusinessServiceTest {
     role.setGradeRequired(grade);
     roles.add(role);
 
-    when(rolesRepository.findAllRoles()).thenReturn(roles);
+    when(rolesRepository.findAll()).thenReturn(roles);
 
     List<Roles> result = staffingManagerBusinessService.getAvailableRolesByMultiFilters(grade,
         department,
         duration);
 
     assertEquals(roles, result);
-    verify(rolesRepository, times(1)).findAllRoles();
+    verify(rolesRepository, times(1)).findAll();
   }
 
   @Test
