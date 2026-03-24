@@ -18,7 +18,7 @@ function EmployeeNavBar() {
               width="150"
               height="80"
               alt= "Company Logo"
-              style= {{marginLeft: '20px'}}
+              style= {{marginLeft: '10px'}}
             />
          
             <Navbar.Brand style={{ flex: 1, textAlign: 'center', fontSize: '2.2rem' }} href="#">Next Step</Navbar.Brand>
