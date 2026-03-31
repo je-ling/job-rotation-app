@@ -10,7 +10,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,6 +48,9 @@ public class StaffingManagerBusinessServiceTest {
     role.setDuration(Duration.THREE_MONTHS);
     role.setGradeRequired(Grades.GRADE_3);
     role.setStaffingManagerEmailAddress("test@example.com");
+    role.setLocation("London");
+    role.setSecurityClearanceRequired("YES");
+    role.setStartDate("01-01-2026");
 
     when(rolesRepository.save(role)).thenReturn(role);
 
@@ -84,6 +86,10 @@ public class StaffingManagerBusinessServiceTest {
     existingRole.setDuration(Duration.THREE_MONTHS);
     existingRole.setGradeRequired(Grades.GRADE_3);
     existingRole.setStaffingManagerEmailAddress("test@example.com");
+    existingRole.setLocation("London");
+    existingRole.setSecurityClearanceRequired("YES");
+    existingRole.setStartDate("01-01-2026");
+    existingRole.setVersion(0);
 
     Roles updatedRole = new Roles();
     updatedRole.setRoleId(123L);
@@ -93,6 +99,9 @@ public class StaffingManagerBusinessServiceTest {
     updatedRole.setDuration(Duration.SIX_MONTHS);
     updatedRole.setGradeRequired(Grades.GRADE_5);
     updatedRole.setStaffingManagerEmailAddress("test@example.com");
+    updatedRole.setLocation("London");
+    updatedRole.setSecurityClearanceRequired("YES");
+    updatedRole.setStartDate("01-01-2026");
 
     when(rolesRepository.findByRoleId(123L)).thenReturn(existingRole);
     when(rolesRepository.save(existingRole)).thenReturn(existingRole);

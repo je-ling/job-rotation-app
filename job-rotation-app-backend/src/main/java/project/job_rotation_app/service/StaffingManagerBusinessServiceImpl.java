@@ -58,19 +58,27 @@ public class StaffingManagerBusinessServiceImpl {
     roleInformationDto.setGradeRequired(role.getGradeRequired().toString());
     roleInformationDto.setJobDescription(role.getJobDescription());
     roleInformationDto.setStaffingManagerEmailAddress(role.getStaffingManagerEmailAddress());
+    roleInformationDto.setLocation(role.getLocation());
+    roleInformationDto.setStartDate(role.getStartDate());
+    roleInformationDto.setSecurityClearanceRequired(role.getSecurityClearanceRequired());
 
     return role;
   }
 
   public Roles createRole(Roles role) {
-    if (role.getRoleName().isEmpty() ||
+    if (role.getRoleName() == null || role.getRoleName().isEmpty() ||
         role.getDepartment() == null ||
         role.getJobDescription().isEmpty() ||
         role.getDuration() == null ||
         role.getGradeRequired() == null ||
-        role.getStaffingManagerEmailAddress().isEmpty()) {
+        role.getStaffingManagerEmailAddress().isEmpty() || role.getLocation().isEmpty() || role.getStartDate() == null) {
+
       throw new BadRequestException("Required fields of create role request cannot be empty");
     }
+
+    role.setRoleId(null);
+    role.setVersion(0);
+
     return rolesRepository.save(role);
   }
 
@@ -86,6 +94,7 @@ public class StaffingManagerBusinessServiceImpl {
     existingRole.setDuration(updatedRole.getDuration());
     existingRole.setGradeRequired(updatedRole.getGradeRequired());
     existingRole.setStaffingManagerEmailAddress(updatedRole.getStaffingManagerEmailAddress());
+    existingRole.setVersion(existingRole.getVersion() + 1);
 
     return rolesRepository.save(existingRole);
   }

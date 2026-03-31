@@ -58,6 +58,9 @@ public class EmployeeBusinessServiceImpl {
     roleInformationDto.setGradeRequired(role.getGradeRequired().toString());
     roleInformationDto.setJobDescription(role.getJobDescription());
     roleInformationDto.setStaffingManagerEmailAddress(role.getStaffingManagerEmailAddress());
+    roleInformationDto.setLocation(role.getLocation());
+    roleInformationDto.setStartDate(role.getStartDate());
+    roleInformationDto.setSecurityClearanceRequired(role.getSecurityClearanceRequired());
 
     return role;
   }

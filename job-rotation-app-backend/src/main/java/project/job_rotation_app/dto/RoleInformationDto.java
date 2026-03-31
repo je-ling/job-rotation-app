@@ -1,6 +1,5 @@
 package project.job_rotation_app.dto;
 
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,4 +16,7 @@ public class RoleInformationDto {
   private String department;
   private String duration;
   private String jobDescription;
+  private String location;
+  private String startDate;
+  private String securityClearanceRequired;
 }

@@ -1,6 +1,9 @@
 package project.job_rotation_app.controller;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import project.job_rotation_app.model.Departments;
@@ -57,13 +61,25 @@ public class StaffingManagerController {
         duration);
   }
 
+  @GetMapping("/enums")
+  public Map<String, List<String>> getEnumValues() {
+    Map<String, List<String>> enums = new HashMap<>();
+    enums.put("grades", Arrays.asList(
+        Arrays.stream(Grades.values()).map(Enum::name).toArray(String[]::new)));
+    enums.put("departments", Arrays.asList(
+        Arrays.stream(Departments.values()).map(Enum::name).toArray(String[]::new)));
+    enums.put("durations", Arrays.asList(
+        Arrays.stream(Duration.values()).map(Enum::name).toArray(String[]::new)));
+    return enums;
+  }
+
   @PostMapping("/create-role")
-  public Roles createRole(Roles role) {
+  public Roles createRole(@RequestBody Roles role) {
     return staffingManagerBusinessService.createRole(role);
   }
 
   @PutMapping("/update-role/{roleId}")
-  public Roles updateRole(@PathVariable Long roleId, Roles updatedRole) {
+  public Roles updateRole(@PathVariable Long roleId, @RequestBody Roles updatedRole) {
     return staffingManagerBusinessService.updateRole(roleId, updatedRole);
   }
 
