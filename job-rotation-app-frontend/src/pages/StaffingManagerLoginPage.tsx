@@ -5,6 +5,7 @@ import EmployeeNavBar from "../components/EmployeeNavBar";
 import Footer from "../components/FooterBar";
 
 export const StaffingManagerLoginPage = () => {
+    
     const [emailAddress, setEmailAddress] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -32,6 +33,7 @@ export const StaffingManagerLoginPage = () => {
             if (response.ok) {
                 // redirect user to the staffing manager dashboard page
                 localStorage.setItem("staffingManagerLoggedIn", "true");
+                localStorage.setItem("staffingManagerEmail", emailAddress);
                 navigate("/staffing-manager-dashboard"); 
             } else if (response.status === 400) {
                 setError("Both email and password inputs are required");
@@ -52,8 +54,10 @@ export const StaffingManagerLoginPage = () => {
     return (
         <>
             <EmployeeNavBar />
-             <h1 className="mb-4" style={{ marginTop: "100px", textAlign: "center" }}>Staffing Manager Login</h1>
-            <Container style={{ marginTop: "50px", marginBottom: "200px", maxWidth: "420px", border: "2px solid #ccc", padding: "35px", borderRadius: "10px" }}>
+            <Container style={{ marginTop: "50px", maxWidth: "600px",  padding: "35px", borderRadius: "10px" }}>
+             <h1 className="mb-4" style={{ marginTop: "80px", textAlign: "center", fontSize: "2.0rem" }}>Staffing Manager Login</h1>
+             <hr className="hr" />
+            <Container style={{ marginTop: "50px", marginBottom: "200px", maxWidth: "420px", border: "1px solid #ccc", padding: "35px", borderRadius: "10px" }}>
                 {error && <div className="alert alert-danger">{error}</div>}
                 <form onSubmit={handleSubmit}>
                     <div className="form-group mb-3">
@@ -92,7 +96,10 @@ export const StaffingManagerLoginPage = () => {
                     </button>
                 </form>
             </Container>
+            </Container>
             <Footer />
         </>
     );
 }
+
+export default StaffingManagerLoginPage;

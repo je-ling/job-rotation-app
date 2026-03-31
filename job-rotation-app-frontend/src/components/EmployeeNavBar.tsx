@@ -11,17 +11,16 @@ function EmployeeNavBar() {
     <>
       {[false].map((expand) => (
         <Navbar key={String(expand)} expand={expand} className="bg-body-tertiary mb-3">
-          <Container fluid>
+          <Container>
 
-              <img
+            <img
               src={logo}
               width="150"
               height="80"
-              alt= "Company Logo"
-              style= {{marginLeft: '10px'}}
+              alt="Company Logo"
             />
-         
-            <Navbar.Brand style={{ flex: 1, textAlign: 'center', fontSize: '2.2rem' }} href="#">Next Step</Navbar.Brand>
+
+            <Navbar.Brand style={{ fontSize: '2.5rem', marginRight: '70px' }} href="#">NEXT STEP</Navbar.Brand>
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} style={{ marginRight: '20px' }} />
             <Navbar.Offcanvas
               id={`offcanvasNavbar-expand-${expand}`}
@@ -30,9 +29,9 @@ function EmployeeNavBar() {
             >
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title style={{ flex: 1, textAlign: 'center' }} id={`offcanvasNavbar-Title-${expand}`}>
-                  Next Step
+                  NEXT STEP
                 </Offcanvas.Title>
-                
+
               </Offcanvas.Header>
               <Offcanvas.Body>
                 <Nav className="justify-content-end flex-grow-1 pe-3">

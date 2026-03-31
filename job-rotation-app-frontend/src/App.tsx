@@ -1,16 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import EmployeeNavBar from './components/EmployeeNavBar';
-import Footer from './components/FooterBar';
-import { StaffingManagerLoginPage } from './pages/StaffingManagerLoginPage';
+import { Routes, Route } from "react-router-dom";
+import { StaffingManagerLandingPage } from "./pages/StaffingManagerLandingPage";
+import { StaffingManagerLoginPage } from "./pages/StaffingManagerLoginPage";
+
 
 function App() {
   return (
-    <>
-      <StaffingManagerLoginPage />
-      {/* <EmployeeNavBar />
-      <Footer/> */}
-    </>
-  )
+    <Routes>
+      <Route path="/staffing-manager-dashboard" element={<StaffingManagerLandingPage />} />
+      <Route path="/login" element={<StaffingManagerLoginPage />} />
+      <Route path="*" element={<div>Page Not Found</div>} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
