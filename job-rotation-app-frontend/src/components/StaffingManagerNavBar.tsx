@@ -1,10 +1,18 @@
 import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
-import logo from "../assets/logo.svg";
+import { Button } from "react-bootstrap";
+import logo from '../assets/logo1.png';
 
 export function StaffingManagerNavBar() {
   const [managerName, setManagerName] = useState("");
+
+  const logout = () => {
+    localStorage.removeItem("staffingManagerName");
+    localStorage.removeItem("staffingManagerEmailAddress");
+
+    window.location.href = "/login";
+  };
 
   useEffect(() => {
     const name = localStorage.getItem("staffingManagerName");
@@ -16,15 +24,30 @@ export function StaffingManagerNavBar() {
   return (
     <>
       {[false].map((expand) => (
-        <Navbar key={String(expand)} expand={expand} className="bg-body-tertiary mb-3">
+        <Navbar
+          key={String(expand)}
+          expand={expand}
+          className="mb-3"
+          style={{ height: '90px', backgroundColor: '#0058AB' }}
+        >
           <Container>
-            <img src={logo} width="150" height="80" alt="Company Logo" />
-            <Navbar.Brand style={{ fontSize: "2.5rem", marginRight: "70px" }} href="#">
+            <img
+              src={logo}
+              width="180"
+              height="45"
+              alt="Company Logo"
+            />
+            <Navbar.Brand style={{ fontSize: "2.5rem", marginLeft: "400px", color: "white" }} href="#">
               NEXT STEP
             </Navbar.Brand>
-            <Navbar.Text>
-              Signed in as: {managerName || "USER"}
-            </Navbar.Text>
+            <div style={{ display: "flex", alignItems: "center", marginLeft: "auto" }}>
+              <Navbar.Text style={{ marginRight: "10px", color: "white" }}>
+                Signed in as: {managerName || "USER"}
+              </Navbar.Text>
+              <Button variant="outline-light" onClick={logout}>
+                Sign Out
+              </Button>
+            </div>
           </Container>
         </Navbar>
       ))}

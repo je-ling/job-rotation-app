@@ -23,11 +23,11 @@ type EnumValues = {
     durations: string[];
 };
 
-type CreateRoleFormProps = {
+type UpdateRoleFormProps = {
     onClose: () => void;
 };
 
-const CreateRoleForm = ({ onClose }: CreateRoleFormProps) => {
+const UpdateRoleForm = ({ onClose }: UpdateRoleFormProps) => {
     const [successMessage, setSuccessMessage] = useState("");
 
     const [role, setRole] = useState<Role>({
@@ -50,16 +50,8 @@ const CreateRoleForm = ({ onClose }: CreateRoleFormProps) => {
     });
 
     const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const savedEmail = localStorage.getItem("staffingManagerEmailAddress");
-        if (savedEmail) {
-            setRole((prevRole) => ({
-                ...prevRole,
-                staffingManagerEmailAddress: savedEmail,
-            }));
-        }
-    }, []);
+    const [roleIdInput, setRoleIdInput] = useState("");
+    const [fetchingRole, setFetchingRole] = useState(false);
 
     useEffect(() => {
         const fetchEnums = async () => {
@@ -93,8 +85,8 @@ const CreateRoleForm = ({ onClose }: CreateRoleFormProps) => {
         console.log("Submitting role:", role);
         console.log("Role state before submission:", role);
         try {
-            const response = await fetch("/staffing-manager/create-role", {
-                method: "POST",
+            const response = await fetch(`/staffing-manager/update-role/${role.roleId}`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -102,16 +94,33 @@ const CreateRoleForm = ({ onClose }: CreateRoleFormProps) => {
             });
 
             if (response.ok) {
-                console.log("Role created successfully");
-                setSuccessMessage("Role created successfully.");
+                console.log("Role updated successfully");
+                setSuccessMessage("Role updated successfully.");
                 setTimeout(() => {
-                    onClose();
+                    onClose(); 
                 }, 2000);
             } else {
-                console.error("Failed to create role");
+                console.error("Failed to update role");
             }
         } catch (error) {
-            console.error("An error occurred while creating the role:", error);
+            console.error("An error occurred while updating the role:", error);
+        }
+    };
+
+    const fetchRoleDetails = async () => {
+        if (!roleIdInput) return;
+        setFetchingRole(true);
+        try {
+            const response = await fetch(`http://localhost:8080/staffing-manager/available-roles/${roleIdInput}`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch role details. Please provide a valid Role ID.");
+            }
+            const data = await response.json();
+            setRole(data);
+        } catch (err) {
+            console.error(err instanceof Error ? err.message : "An error occurred");
+        } finally {
+            setFetchingRole(false);
         }
     };
 
@@ -121,6 +130,30 @@ const CreateRoleForm = ({ onClose }: CreateRoleFormProps) => {
                 <p>Loading form...</p>
             ) : (
                 <form onSubmit={handleSubmit}>
+                    <Row className="mb-3">
+                        <Col md={6}>
+                            <label htmlFor="roleIdInput" className="form-label">
+                                Role ID
+                            </label>
+                            <input
+                                className="form-control"
+                                id="roleIdInput"
+                                name="roleIdInput"
+                                placeholder="Enter Role ID"
+                                value={roleIdInput}
+                                onChange={(e) => setRoleIdInput(e.target.value)}
+                            />
+                        </Col>
+                        <Col md={6} className="d-flex align-items-end">
+                            <Button
+                                variant="info"
+                                onClick={fetchRoleDetails}
+                            >
+                                {fetchingRole ? "Fetching..." : "Get Role Details"}
+                            </Button>
+                        </Col>
+                    </Row>
+
                     <Row className="mb-3">
                         <Col md={6}>
                             <label htmlFor="roleName" className="form-label">
@@ -257,6 +290,7 @@ const CreateRoleForm = ({ onClose }: CreateRoleFormProps) => {
                                 className="form-control"
                                 id="securityClearanceRequired"
                                 name="securityClearanceRequired"
+                                value={role.securityClearanceRequired}
                                 onChange={handleChange}
                                 required
                             >
@@ -296,7 +330,7 @@ const CreateRoleForm = ({ onClose }: CreateRoleFormProps) => {
                             Cancel
                         </Button>
                         <Button variant="primary" type="submit" className="w-100">
-                            Submit Role
+                            Update Role
                         </Button>
                     </div>
                 </form>
@@ -305,4 +339,4 @@ const CreateRoleForm = ({ onClose }: CreateRoleFormProps) => {
     );
 };
 
-export default CreateRoleForm;
+export default UpdateRoleForm;

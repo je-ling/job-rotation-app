@@ -3,25 +3,35 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import logo from '../assets/logo.svg';
+import logo from '../assets/logo1.png';
 
 
 function EmployeeNavBar() {
   return (
     <>
       {[false].map((expand) => (
-        <Navbar key={String(expand)} expand={expand} className="bg-body-tertiary mb-3">
+        <Navbar
+          key={String(expand)}
+          expand={expand}
+          className="mb-3"
+          style={{ height: '90px', backgroundColor: '#0058AB' }}
+        >
           <Container>
-
             <img
               src={logo}
-              width="150"
-              height="80"
+              width="180"
+              height="45"
+              // width="150"
+              // height="80"
+              // width="90"
+              // height="82"
               alt="Company Logo"
             />
-
-            <Navbar.Brand style={{ fontSize: '2.5rem', marginRight: '70px' }} href="#">NEXT STEP</Navbar.Brand>
-            <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} style={{ marginRight: '20px' }} />
+            <Navbar.Brand style={{ fontSize: '2.5rem', marginRight: '70px', color: 'white' }} href="#">NEXT STEP</Navbar.Brand>
+            <Navbar.Toggle
+              aria-controls={`offcanvasNavbar-expand-${expand}`}
+              style={{ marginRight: '20px', color: 'white', borderColor: 'white' }}
+            />
             <Navbar.Offcanvas
               id={`offcanvasNavbar-expand-${expand}`}
               aria-labelledby={`offcanvasNavbar-Title-${expand}`}
@@ -31,11 +41,10 @@ function EmployeeNavBar() {
                 <Offcanvas.Title style={{ flex: 1, textAlign: 'center' }} id={`offcanvasNavbar-Title-${expand}`}>
                   NEXT STEP
                 </Offcanvas.Title>
-
               </Offcanvas.Header>
               <Offcanvas.Body>
                 <Nav className="justify-content-end flex-grow-1 pe-3">
-                  <Nav.Link href="#action1">Home</Nav.Link>
+                  <Nav.Link href="/">Home</Nav.Link>
                   <Nav.Link href="#action2">FAQs</Nav.Link>
                   <NavDropdown
                     title="Resources"
@@ -50,7 +59,7 @@ function EmployeeNavBar() {
                       Staffing Managers Contact List
                     </NavDropdown.Item>
                   </NavDropdown>
-                  <Nav.Link href="#staffing-manager-login">Staffing Manager Login</Nav.Link>
+                  <Nav.Link href="/login">Staffing Manager Login</Nav.Link>
                 </Nav>
                 {/* <Form className="d-flex">
                   <Form.Control
