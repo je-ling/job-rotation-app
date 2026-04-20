@@ -1,6 +1,9 @@
 package project.job_rotation_app.controller;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,5 +54,17 @@ public class EmployeeController {
   @GetMapping("/available-roles/{roleId}")
   public Roles getRoleDetails(@PathVariable Long roleId) {
     return employeeBusinessService.getRoleDetails(roleId);
+  }
+
+  @GetMapping("/enums")
+  public Map<String, List<String>> getEnumValues() {
+    Map<String, List<String>> enums = new HashMap<>();
+    enums.put("grades", Arrays.asList(
+        Arrays.stream(Grades.values()).map(Enum::name).toArray(String[]::new)));
+    enums.put("departments", Arrays.asList(
+        Arrays.stream(Departments.values()).map(Enum::name).toArray(String[]::new)));
+    enums.put("durations", Arrays.asList(
+        Arrays.stream(Duration.values()).map(Enum::name).toArray(String[]::new)));
+    return enums;
   }
 }

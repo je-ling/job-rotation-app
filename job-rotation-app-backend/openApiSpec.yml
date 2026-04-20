@@ -49,7 +49,93 @@ components:
           type: string
         jobDescription:
           type: string
+    EnumsResponse:
+      description: Response containing enum options for filters
+      type: object
+      required:
+        - grades
+        - departments
+        - durations
+      properties:
+        grades:
+          type: array
+          items:
+            type: string
+            enum:
+              - GRADE_1
+              - GRADE_2
+              - GRADE_3
+              - GRADE_4
+              - GRADE_5
+              - GRADE_6
+              - GRADE_7
+              - GRADE_8
+              - GRADE_9
+              - GRADE_10
+        departments:
+          type: array
+          items:
+            type: string
+            enum:
+              - PLATFORM_ENGINEERING
+              - AGILE_DELIVERY
+              - ENGAGEMENT_MANAGEMENT
+              - I_AND_D
+              - ARCHITECTURE
+              - DEVELOPMENT
+              - DIGITAL_EXPERIENCE
+              - BUSINESS_OPERATIONS
+        durations:
+          type: array
+          items:
+            type: string
+            enum:
+              - THREE_MONTHS
+              - SIX_MONTHS
+              - NINE_MONTHS
+              - TWELVE_MONTHS
 paths:
+  /employee/enums:
+    get:
+      tags:
+        - Employee Actions
+      responses:
+        '200':
+          description: A list of available enum values for job filters for employee landing page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnumsResponse'
+              example:
+                grades:
+                  - GRADE_1
+                  - GRADE_2
+                  - GRADE_3
+                  - GRADE_4
+                  - GRADE_5
+                  - GRADE_6
+                  - GRADE_7
+                  - GRADE_8
+                  - GRADE_9
+                  - GRADE_10
+                departments:
+                  - PLATFORM_ENGINEERING
+                  - AGILE_DELIVERY
+                  - ENGAGEMENT_MANAGEMENT
+                  - I_AND_D
+                  - ARCHITECTURE
+                  - DEVELOPMENT
+                  - DIGITAL_EXPERIENCE
+                  - BUSINESS_OPERATIONS
+                durations:
+                  - THREE_MONTHS
+                  - SIX_MONTHS
+                  - NINE_MONTHS
+                  - TWELVE_MONTHS
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
   /employee/list-available-roles:
     get:
       tags:
@@ -176,6 +262,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetRoleDetailsResponse'
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+  /staffing-manager/enums:
+    get:
+      tags:
+        - Staffing Manager Actions
+      responses:
+        '200':
+          description: A list of available enum values for job filters for staffing manager landing page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnumsResponse'
+              example:
+                grades:
+                  - GRADE_1
+                  - GRADE_2
+                  - GRADE_3
+                  - GRADE_4
+                  - GRADE_5
+                  - GRADE_6
+                  - GRADE_7
+                  - GRADE_8
+                  - GRADE_9
+                  - GRADE_10
+                departments:
+                  - PLATFORM_ENGINEERING
+                  - AGILE_DELIVERY
+                  - ENGAGEMENT_MANAGEMENT
+                  - I_AND_D
+                  - ARCHITECTURE
+                  - DEVELOPMENT
+                  - DIGITAL_EXPERIENCE
+                  - BUSINESS_OPERATIONS
+                durations:
+                  - THREE_MONTHS
+                  - SIX_MONTHS
+                  - NINE_MONTHS
+                  - TWELVE_MONTHS
         '400':
           description: Bad Request
         '500':
