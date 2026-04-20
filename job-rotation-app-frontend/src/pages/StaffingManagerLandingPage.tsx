@@ -9,6 +9,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import UpdateRoleForm from "../components/UpdateRoleForm";
 import DeleteRoleForm from "../components/DeleteRoleForm";
+import StaffingManagerListRolesTable from "../components/StaffingManagerListRolesTable";
 
 
 export const StaffingManagerLandingPage = () => {
@@ -29,21 +30,21 @@ export const StaffingManagerLandingPage = () => {
     return (
         <>
             <StaffingManagerNavBar />
-            <Container style={{ marginTop: "10px", maxWidth: "700px", padding: "35px", textAlign: "center" }}>
-                <Row>
-                    <Col>
-                        <Button variant="primary" size="lg" onClick={handleShowCreate} className="mt-4">
+            <Container style={{ marginTop: "10px", maxWidth: "700px", padding: "30px", paddingLeft: '60px' }}>
+                <Row >
+                    <Col style={{ marginRight: '15px', marginLeft: '15px'}}>
+                        <Button variant="primary" style={{ width: '180px' }} size="lg" onClick={handleShowCreate} className="mt-4">
                             Create New Role
                         </Button>
                     </Col>
-                    <Col>
+                    <Col style={{ marginRight: '15px', marginLeft: '15px' }}>
                         <Button variant="success" size="lg" onClick={handleShowUpdate} className="mt-4">
-                            Update Roles
+                            Update Role
                         </Button>
                     </Col>
-                    <Col>
+                    <Col style={{ marginRight: '15px', marginLeft: '15px' }}>
                         <Button variant="danger" size="lg" onClick={handleShowDelete} className="mt-4">
-                            Delete Roles
+                            Delete Role
                         </Button>
                     </Col>
                 </Row>
@@ -54,7 +55,7 @@ export const StaffingManagerLandingPage = () => {
                     <Modal.Title style={{ marginLeft: "auto" }}>Create Job Role</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <CreateRoleForm onClose={handleCloseCreate} />
+                    <CreateRoleForm onClose={handleCloseCreate} onRoleCreated={handleCloseCreate} />
                 </Modal.Body>
             </Modal>
 
@@ -63,7 +64,7 @@ export const StaffingManagerLandingPage = () => {
                     <Modal.Title style={{ marginLeft: "auto" }}>Update Job Role</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <UpdateRoleForm onClose={handleCloseUpdate} />
+                    <UpdateRoleForm onClose={handleCloseUpdate} roleId={0} />
                 </Modal.Body>
             </Modal>
 
@@ -75,6 +76,10 @@ export const StaffingManagerLandingPage = () => {
                     <DeleteRoleForm onClose={handleCloseDelete} />
                 </Modal.Body>
             </Modal>
+
+            <Container style={{ marginTop: "5px", maxWidth: "700px", textAlign: "center" }}>
+                <StaffingManagerListRolesTable />
+            </Container>
             <Footer />
         </>
     );

@@ -28,7 +28,7 @@ export function StaffingManagerNavBar() {
           key={String(expand)}
           expand={expand}
           className="mb-3"
-          style={{ height: '90px', backgroundColor: '#0058AB' }}
+          style={{ height: '90px', backgroundColor: '#0058AB', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
         >
           <Container>
             <img
@@ -37,10 +37,10 @@ export function StaffingManagerNavBar() {
               height="45"
               alt="Company Logo"
             />
-            <Navbar.Brand style={{ fontSize: "2.5rem", marginLeft: "400px", color: "white" }} href="#">
+            <Navbar.Brand style={{ fontSize: '2.5rem', color: 'white', textAlign: 'center', marginLeft: '100px' }} href="#">
               NEXT STEP
             </Navbar.Brand>
-            <div style={{ display: "flex", alignItems: "center", marginLeft: "auto" }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
               <Navbar.Text style={{ marginRight: "10px", color: "white" }}>
                 Signed in as: {managerName || "USER"}
               </Navbar.Text>

@@ -24,14 +24,15 @@ type EnumValues = {
 };
 
 type UpdateRoleFormProps = {
+    roleId: number; 
     onClose: () => void;
 };
 
-const UpdateRoleForm = ({ onClose }: UpdateRoleFormProps) => {
+const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
     const [successMessage, setSuccessMessage] = useState("");
 
     const [role, setRole] = useState<Role>({
-        roleId: 0,
+        roleId: roleId,
         roleName: "",
         gradeRequired: "",
         department: "",
@@ -42,6 +43,23 @@ const UpdateRoleForm = ({ onClose }: UpdateRoleFormProps) => {
         startDate: "",
         securityClearanceRequired: "",
     });
+
+    useEffect(() => {
+        const fetchRoleDetails = async () => {
+            try {
+                const response = await fetch(`/staffing-manager/available-roles/${roleId}`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch role details. Please try again.");
+                }
+                const data = await response.json();
+                setRole(data);
+            } catch (err) {
+                console.error(err instanceof Error ? err.message : "An error occurred");
+            }
+        };
+
+        fetchRoleDetails();
+    }, [roleId]); 
 
     const [enums, setEnums] = useState<EnumValues>({
         grades: [],
@@ -56,7 +74,7 @@ const UpdateRoleForm = ({ onClose }: UpdateRoleFormProps) => {
     useEffect(() => {
         const fetchEnums = async () => {
             try {
-                const response = await fetch("http://localhost:8080/staffing-manager/enums");
+                const response = await fetch("/staffing-manager/enums");
                 if (!response.ok) {
                     throw new Error("Failed to fetch values required to create a role. Please try again.");
                 }
@@ -97,7 +115,7 @@ const UpdateRoleForm = ({ onClose }: UpdateRoleFormProps) => {
                 console.log("Role updated successfully");
                 setSuccessMessage("Role updated successfully.");
                 setTimeout(() => {
-                    onClose(); 
+                    onClose();
                 }, 2000);
             } else {
                 console.error("Failed to update role");
@@ -111,7 +129,7 @@ const UpdateRoleForm = ({ onClose }: UpdateRoleFormProps) => {
         if (!roleIdInput) return;
         setFetchingRole(true);
         try {
-            const response = await fetch(`http://localhost:8080/staffing-manager/available-roles/${roleIdInput}`);
+            const response = await fetch(`/staffing-manager/available-roles/${roleIdInput}`);
             if (!response.ok) {
                 throw new Error("Failed to fetch role details. Please provide a valid Role ID.");
             }

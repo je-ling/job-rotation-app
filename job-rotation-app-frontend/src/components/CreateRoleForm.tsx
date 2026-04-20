@@ -25,9 +25,10 @@ type EnumValues = {
 
 type CreateRoleFormProps = {
     onClose: () => void;
+    onRoleCreated: () => void; 
 };
 
-const CreateRoleForm = ({ onClose }: CreateRoleFormProps) => {
+const CreateRoleForm = ({ onClose, onRoleCreated }: CreateRoleFormProps) => {
     const [successMessage, setSuccessMessage] = useState("");
 
     const [role, setRole] = useState<Role>({
@@ -64,7 +65,7 @@ const CreateRoleForm = ({ onClose }: CreateRoleFormProps) => {
     useEffect(() => {
         const fetchEnums = async () => {
             try {
-                const response = await fetch("http://localhost:8080/staffing-manager/enums");
+                const response = await fetch("/staffing-manager/enums");
                 if (!response.ok) {
                     throw new Error("Failed to fetch values required to create a role. Please try again.");
                 }
@@ -103,8 +104,10 @@ const CreateRoleForm = ({ onClose }: CreateRoleFormProps) => {
 
             if (response.ok) {
                 console.log("Role created successfully");
-                setSuccessMessage("Role created successfully.");
+                setSuccessMessage("Role created successfully!");
                 setTimeout(() => {
+                    setSuccessMessage("");
+                    onRoleCreated(); 
                     onClose();
                 }, 2000);
             } else {
