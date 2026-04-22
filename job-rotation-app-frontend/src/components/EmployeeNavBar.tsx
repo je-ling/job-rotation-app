@@ -4,9 +4,36 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import logo from '../assets/logo1.png';
-
+import { useState } from "react";
+import RotationProcessModal from "./RotationProcessModal";
+import ExpressInterestModal from './ExpressInterestModal';
+import GtdSupportModal from './GtdSupportModal';
+import PeopleSupportModal from './PeopleSupportModal';
+import QuestionsModal from './QuestionsModal';
+import ContactListModal from './ContactListModal';
 
 function EmployeeNavBar() {
+  const [showModal, setShowModal] = useState(false);
+  const [showExpressInterestModal, setShowExpressInterestModal] = useState(false);
+  const [showGtdSupportModal, setShowGtdSupportModal] = useState(false);
+  const [showPeopleSupportModal, setShowPeopleSupportModal] = useState(false);
+  const [showQuestionsModal, setShowQuestionsModal] = useState(false);
+  const [showContactListModal, setShowContactListModal] = useState(false);
+
+  const handleShowModal = () => setShowModal(true);
+  const handleShowExpressInterestModal = () => setShowExpressInterestModal(true);
+  const handleShowGtdSupportModal = () => setShowGtdSupportModal(true);
+  const handleShowPeopleSupportModal = () => setShowPeopleSupportModal(true);
+  const handleShowQuestionsModal = () => setShowQuestionsModal(true);
+  const handleShowContactListModal = () => setShowContactListModal(true);
+
+  const handleCloseModal = () => setShowModal(false);
+  const handleCloseExpressInterestModal = () => setShowExpressInterestModal(false);
+  const handleCloseGtdSupportModal = () => setShowGtdSupportModal(false);
+  const handleClosePeopleSupportModal = () => setShowPeopleSupportModal(false);
+  const handleCloseQuestionsModal = () => setShowQuestionsModal(false);
+  const handleCloseContactListModal = () => setShowContactListModal(false);
+
   return (
     <>
       {[false].map((expand) => (
@@ -23,7 +50,7 @@ function EmployeeNavBar() {
               height="45"
               alt="Company Logo"
             />
-            <Navbar.Brand style={{ fontSize: '2.5rem', color: 'white', textAlign: 'center', marginRight: '40px'}} href="/">
+            <Navbar.Brand style={{ fontSize: '2.5rem', color: 'white', textAlign: 'center', marginRight: '40px' }} href="/">
               NEXT STEP
             </Navbar.Brand>
             <Navbar.Toggle
@@ -48,14 +75,13 @@ function EmployeeNavBar() {
                     title="Resources"
                     id={`offcanvasNavbarDropdown-expand-${expand}`}
                   >
-                    {/* TO DO: use modal pages for pop up information pages here! */}
-                    <NavDropdown.Item href="#rotation-process">Rotation Process</NavDropdown.Item>
-                    <NavDropdown.Item href="#express-interest"> Express Interest in a Role </NavDropdown.Item>
-                    <NavDropdown.Item href="#gtd-support"> GTD Support </NavDropdown.Item>
-                    <NavDropdown.Item href="#people-support"> People Support </NavDropdown.Item>
+                    <NavDropdown.Item onClick={handleShowModal}>Rotation Process</NavDropdown.Item>
+                    <NavDropdown.Item onClick={handleShowExpressInterestModal}> Express Interest in a Role </NavDropdown.Item>
+                    <NavDropdown.Item onClick={handleShowGtdSupportModal}> GTD Support </NavDropdown.Item>
+                    <NavDropdown.Item onClick={handleShowPeopleSupportModal}> People Support </NavDropdown.Item>
+                    <NavDropdown.Item onClick={handleShowQuestionsModal}> FAQs </NavDropdown.Item>
                     <NavDropdown.Divider />
-                    {/* contact list - also have a copy button for contact email address */}
-                    <NavDropdown.Item href="#staffing-managers-contacts">
+                    <NavDropdown.Item onClick={handleShowContactListModal}>
                       Staffing Managers Contact List
                     </NavDropdown.Item>
                   </NavDropdown>
@@ -66,6 +92,13 @@ function EmployeeNavBar() {
           </Container>
         </Navbar>
       ))}
+
+      <RotationProcessModal show={showModal} onClose={handleCloseModal} />
+      <ExpressInterestModal show={showExpressInterestModal} onClose={handleCloseExpressInterestModal} />
+      <GtdSupportModal show={showGtdSupportModal} onClose={handleCloseGtdSupportModal} />
+      <PeopleSupportModal show={showPeopleSupportModal} onClose={handleClosePeopleSupportModal} />
+      <QuestionsModal show={showQuestionsModal} onClose={handleCloseQuestionsModal} />
+      <ContactListModal show={showContactListModal} onClose={handleCloseContactListModal} />
     </>
   );
 }
