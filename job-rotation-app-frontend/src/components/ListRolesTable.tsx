@@ -12,12 +12,11 @@ type Role = {
     location: string;
     staffingManagerEmailAddress: string;
     duration: string;
+    client: string
     jobDescription: string;
     startDate: string;
     securityClearanceRequired: string;
 };
-
-//  TO DO: need to update role fields
 
 const searchFilter = (roles: Role[], query: string): Role[] => {
     return roles.filter((role) => {
@@ -25,7 +24,8 @@ const searchFilter = (roles: Role[], query: string): Role[] => {
         const roleNameMatch = role.roleName.toLowerCase().includes(query.toLowerCase());
         const departmentMatch = role.department.toLowerCase().includes(query.toLowerCase());
         const locationMatch = role.location.toLowerCase().includes(query.toLowerCase());
-        return roleIdMatch || roleNameMatch || departmentMatch || locationMatch;
+        const clientMatch = role.client.toLowerCase().includes(query.toLowerCase());
+        return roleIdMatch || roleNameMatch || departmentMatch || locationMatch || clientMatch;
     });
 }
 
@@ -91,14 +91,14 @@ const ListRolesTable: React.FC = () => {
                     <Modal.Header closeButton>
                         <Modal.Title style={{ marginLeft: "auto" }}>Filter Job Roles</Modal.Title>
                     </Modal.Header>
-                    {/* TO DO: have client as a filter based of stakeholder feedback */}
                     <Modal.Body>
                         <FiltersForm onClose={handleCloseFiltersJob} onApply={(filters) => {
                             const filteredRoles = allRoles.filter((role) => {
                                 return (
                                     (filters.grade === "" || role.gradeRequired === filters.grade) &&
                                     (filters.department === "" || role.department === filters.department) &&
-                                    (filters.duration === "" || role.duration === filters.duration)
+                                    (filters.duration === "" || role.duration === filters.duration) &&
+                                    (filters.client === "" || role.client.toLowerCase().includes(filters.client.toLowerCase()))
                                 );
                             });
                             setRoles(filteredRoles);
@@ -114,8 +114,8 @@ const ListRolesTable: React.FC = () => {
                         <th>Name</th>
                         <th>Grade</th>
                         <th>Department</th>
-                        <th>Location</th>
                         <th>Staffing Manager</th>
+                        <th>Client</th>
                         <th>Details</th>
                     </tr>
                 </thead>
@@ -126,8 +126,8 @@ const ListRolesTable: React.FC = () => {
                             <td>{role.roleName}</td>
                             <td>{role.gradeRequired}</td>
                             <td>{role.department}</td>
-                            <td>{role.location}</td>
                             <td>{role.staffingManagerEmailAddress}</td>
+                            <td>{role.client}</td>
                             <td>
                                 <Modal show={showJobModal} onHide={handleCloseJob} size="lg" centered scrollable>
                                     <Modal.Header closeButton>

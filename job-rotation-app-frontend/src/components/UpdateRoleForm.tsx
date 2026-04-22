@@ -12,6 +12,7 @@ type Role = {
     location: string;
     staffingManagerEmailAddress: string;
     duration: string;
+    client: string;
     jobDescription: string;
     startDate: string;
     securityClearanceRequired: string;
@@ -24,7 +25,7 @@ type EnumValues = {
 };
 
 type UpdateRoleFormProps = {
-    roleId: number; 
+    roleId: number;
     onClose: () => void;
 };
 
@@ -39,6 +40,7 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
         location: "",
         staffingManagerEmailAddress: "",
         duration: "",
+        client: "",
         jobDescription: "",
         startDate: "",
         securityClearanceRequired: "",
@@ -59,7 +61,7 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
         };
 
         fetchRoleDetails();
-    }, [roleId]); 
+    }, [roleId]);
 
     const [enums, setEnums] = useState<EnumValues>({
         grades: [],
@@ -280,7 +282,7 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
                     </Row>
 
                     <Row className="mb-3">
-                        <Col md={6}>
+                        <Col md={4}>
                             <label htmlFor="duration" className="form-label">
                                 Duration
                             </label>
@@ -300,9 +302,9 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
                                 ))}
                             </select>
                         </Col>
-                        <Col md={6}>
+                        <Col md={4}>
                             <label htmlFor="securityClearanceRequired" className="form-label">
-                                Security Clearance Eligible / Required
+                                SC Eligible / Required
                             </label>
                             <select
                                 className="form-control"
@@ -316,6 +318,20 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
                                 <option value="YES">YES</option>
                                 <option value="NO">NO</option>
                             </select>
+                        </Col>
+                        <Col md={4}>
+                            <label htmlFor="client" className="form-label">
+                                Client
+                            </label>
+                            <input
+                                className="form-control"
+                                id="client"
+                                name="client"
+                                placeholder="Client"
+                                value={role.client}
+                                onChange={handleChange}
+                                required
+                            />
                         </Col>
                     </Row>
 

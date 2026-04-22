@@ -12,6 +12,7 @@ type Role = {
     location: string;
     staffingManagerEmailAddress: string;
     duration: string;
+    client: string;
     jobDescription: string;
     startDate: string;
     securityClearanceRequired: string;
@@ -36,6 +37,7 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
         location: "",
         staffingManagerEmailAddress: "",
         duration: "",
+        client: "",
         jobDescription: "",
         startDate: "",
         securityClearanceRequired: "",
@@ -55,7 +57,7 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
     useEffect(() => {
         const fetchEnums = async () => {
             try {
-                const response = await fetch("http://localhost:8080/staffing-manager/enums");
+                const response = await fetch("/staffing-manager/enums");
                 if (!response.ok) {
                     throw new Error("Failed to fetch values required to create a role. Please try again.");
                 }
@@ -95,8 +97,8 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                 console.log("Role deleted successfully");
                 setSuccessMessage("Role deleted successfully.");
                 setTimeout(() => {
-                    onClose(); 
-                }, 2000); 
+                    onClose();
+                }, 2000);
             } else {
                 console.error("Failed to delete role");
             }
@@ -109,7 +111,7 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
         if (!roleIdInput) return;
         setFetchingRole(true);
         try {
-            const response = await fetch(`http://localhost:8080/staffing-manager/available-roles/${roleIdInput}`);
+            const response = await fetch(`/staffing-manager/available-roles/${roleIdInput}`);
             if (!response.ok) {
                 throw new Error("Failed to fetch role details. Please provide a valid Role ID.");
             }
@@ -260,7 +262,7 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                     </Row>
 
                     <Row className="mb-3">
-                        <Col md={6}>
+                        <Col md={4}>
                             <label htmlFor="duration" className="form-label">
                                 Duration
                             </label>
@@ -280,15 +282,14 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                                 ))}
                             </select>
                         </Col>
-                        <Col md={6}>
+                        <Col md={4}>
                             <label htmlFor="securityClearanceRequired" className="form-label">
-                                Security Clearance Eligible / Required
+                                SC Eligible / Required
                             </label>
                             <select
                                 className="form-control"
                                 id="securityClearanceRequired"
                                 name="securityClearanceRequired"
-                                value={role.securityClearanceRequired}
                                 onChange={handleChange}
                                 required
                             >
@@ -296,6 +297,20 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                                 <option value="YES">YES</option>
                                 <option value="NO">NO</option>
                             </select>
+                        </Col>
+                        <Col md={4}>
+                            <label htmlFor="client" className="form-label">
+                                Client
+                            </label>
+                            <input
+                                className="form-control"
+                                id="client"
+                                name="client"
+                                placeholder="Client"
+                                value={role.client}
+                                onChange={handleChange}
+                                required
+                            />
                         </Col>
                     </Row>
 

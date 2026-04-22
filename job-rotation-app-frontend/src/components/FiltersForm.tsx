@@ -8,10 +8,11 @@ type EnumValues = {
     grades: string[];
     departments: string[];
     durations: string[];
+    client: string;
 };
 
 type FiltersFormProps = {
-    onApply: (filters: { grade: string; department: string; duration: string }) => void;
+    onApply: (filters: { grade: string; department: string; duration: string; client: string }) => void;
     onClose: () => void;
 };
 
@@ -20,12 +21,14 @@ const FiltersForm = ({ onApply, onClose }: FiltersFormProps) => {
         grade: "",
         department: "",
         duration: "",
+        client: "",
     });
 
     const [enums, setEnums] = useState<EnumValues>({
         grades: [],
         departments: [],
         durations: [],
+        client: "",
     });
 
     useEffect(() => {
@@ -45,7 +48,7 @@ const FiltersForm = ({ onApply, onClose }: FiltersFormProps) => {
         fetchEnums();
     }, []);
 
-    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFilters((prevFilters) => ({
             ...prevFilters,
@@ -55,13 +58,13 @@ const FiltersForm = ({ onApply, onClose }: FiltersFormProps) => {
 
     const handleApply = () => {
         onApply(filters);
-        setFilters({ grade: "", department: "", duration: "" }); // Reset filters after applying
+        setFilters({ grade: "", department: "", duration: "", client: "" }); // Reset filters after applying
     };
 
     return (
         <form>
             <Row className="mb-3">
-                <Col md={4}>
+                <Col md={3}>
                     <Form.Group controlId="filterGrade">
                         <Form.Label>Grade</Form.Label>
                         <Form.Select
@@ -78,7 +81,7 @@ const FiltersForm = ({ onApply, onClose }: FiltersFormProps) => {
                         </Form.Select>
                     </Form.Group>
                 </Col>
-                <Col md={4}>
+                <Col md={3}>
                     <Form.Group controlId="filterDepartment">
                         <Form.Label>Department</Form.Label>
                         <Form.Select
@@ -95,7 +98,7 @@ const FiltersForm = ({ onApply, onClose }: FiltersFormProps) => {
                         </Form.Select>
                     </Form.Group>
                 </Col>
-                <Col md={4}>
+                <Col md={3}>
                     <Form.Group controlId="filterDuration">
                         <Form.Label>Duration</Form.Label>
                         <Form.Select
@@ -110,6 +113,18 @@ const FiltersForm = ({ onApply, onClose }: FiltersFormProps) => {
                                 </option>
                             ))}
                         </Form.Select>
+                    </Form.Group>
+                </Col>
+                <Col md={3}>
+                    <Form.Group controlId="filterClient">
+                        <Form.Label>Client</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="client"
+                            value={filters.client}
+                            onChange={handleChange}
+                            placeholder="Client Name"
+                        />
                     </Form.Group>
                 </Col>
             </Row>
