@@ -2,9 +2,9 @@ package project.job_rotation_app.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.job_rotation_app.dto.LoginReqBody;
+import project.job_rotation_app.model.StaffingManagerUser;
 import project.job_rotation_app.repository.StaffingManagerRepository;
 
 @Service
@@ -13,18 +13,14 @@ public class AuthBusinessServiceImpl {
   @Autowired
   StaffingManagerRepository staffingManagerRepository;
 
-  private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
   public boolean validateLogin(LoginReqBody userDetails) {
-    if (userDetails == null || userDetails.getEmailAddress() == null
-        || userDetails.getPassword() == null) {
+    if (userDetails == null || userDetails.getEmailAddress() == null || userDetails.getPassword() == null) {
       return false;
     }
 
-//    return staffingManagerRepository.findByEmailAddress(userDetails.getEmailAddress())
-//        .map(user -> encoder.matches(userDetails.getPassword(), user.getPassword()))
-//        .orElse(false);
-    return true;
+    return staffingManagerRepository.findByEmailAddress(userDetails.getEmailAddress())
+        .map(user -> userDetails.getPassword().equals(user.getPassword()))
+        .orElse(false);
   }
 
   public ResponseEntity<?> verifyLoginCredentials(LoginReqBody userDetails) {

@@ -35,11 +35,12 @@ public class EmployeeBusinessServiceImpl {
   }
 
   public List<Roles> getAvailableRolesByMultiFilters(Grades grade, Departments department,
-      Duration duration) {
+      Duration duration, String client) {
     return rolesRepository.findAll().stream()
         .filter(r -> grade == null || r.getGradeRequired() == grade)
         .filter(r -> department == null || r.getDepartment() == department)
         .filter(r -> duration == null || r.getDuration() == duration)
+        .filter(r -> client == null || r.getClient() == client)
         .collect(Collectors.toList());
   }
 

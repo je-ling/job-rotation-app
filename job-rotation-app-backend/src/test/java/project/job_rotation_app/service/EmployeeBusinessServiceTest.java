@@ -133,20 +133,18 @@ class EmployeeBusinessServiceTest {
   @Test
   @DisplayName("When getAvailableRolesByMultiFilters is called then it should return roles matching all specified filters")
   void getAvailableRolesByMultiFiltersReturnsFilteredRoles() {
-    Departments department = Departments.DEVELOPMENT;
-    Duration duration = Duration.THREE_MONTHS;
-    Grades grade = Grades.GRADE_3;
     List<Roles> roles = new ArrayList<>();
     Roles role = new Roles();
-    role.setDepartment(department);
-    role.setDuration(duration);
-    role.setGradeRequired(grade);
+    role.setDepartment(Departments.DEVELOPMENT);
+    role.setDuration(Duration.THREE_MONTHS);
+    role.setGradeRequired(Grades.GRADE_3);
+    role.setClient("Angligan Water");
     roles.add(role);
 
     when(rolesRepository.findAll()).thenReturn(roles);
 
-    List<Roles> result = employeeBusinessService.getAvailableRolesByMultiFilters(grade, department,
-        duration);
+    List<Roles> result = employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3,
+        Departments.DEVELOPMENT, Duration.THREE_MONTHS, "Angligan Water");
 
     assertEquals(roles, result);
     verify(rolesRepository, times(1)).findAll();

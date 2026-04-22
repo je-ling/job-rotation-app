@@ -41,6 +41,8 @@ public class Roles {
 
   private String startDate;
 
+  private String client;
+
   private String securityClearanceRequired;
 
   @Version

@@ -47,8 +47,10 @@ public class EmployeeController {
   public List<Roles> getAvailableRolesByMultiFilters(
       @RequestParam(required = false) Grades grade,
       @RequestParam(required = false) Departments department,
-      @RequestParam(required = false) Duration duration) {
-    return employeeBusinessService.getAvailableRolesByMultiFilters(grade, department, duration);
+      @RequestParam(required = false) Duration duration,
+      @RequestParam(required = false) String client) {
+    return employeeBusinessService.getAvailableRolesByMultiFilters(grade, department, duration,
+        client);
   }
 
   @GetMapping("/available-roles/{roleId}")
