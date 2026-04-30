@@ -24,44 +24,30 @@ type EnumValues = {
     durations: string[];
 };
 
-type UpdateRoleFormProps = {
-    roleId: number;
-    onClose: () => void;
-};
-
-const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
+const UpdateRoleForm = ({ role, onRoleUpdate }: { role: Role | null; onRoleUpdate: (updatedRole: Role) => void }) => {
     const [successMessage, setSuccessMessage] = useState("");
 
-    const [role, setRole] = useState<Role>({
-        roleId: roleId,
-        roleName: "",
-        gradeRequired: "",
-        department: "",
-        location: "",
-        staffingManagerEmailAddress: "",
-        duration: "",
-        client: "",
-        jobDescription: "",
-        startDate: "",
-        securityClearanceRequired: "",
-    });
+    const [formRole, setFormRole] = useState<Role>(
+        role || {
+            roleId: 0,
+            roleName: "",
+            gradeRequired: "",
+            department: "",
+            location: "",
+            staffingManagerEmailAddress: "",
+            duration: "",
+            client: "",
+            jobDescription: "",
+            startDate: "",
+            securityClearanceRequired: "",
+        }
+    );
 
     useEffect(() => {
-        const fetchRoleDetails = async () => {
-            try {
-                const response = await fetch(`/staffing-manager/available-roles/${roleId}`);
-                if (!response.ok) {
-                    throw new Error("Failed to fetch role details. Please try again.");
-                }
-                const data = await response.json();
-                setRole(data);
-            } catch (err) {
-                console.error(err instanceof Error ? err.message : "An error occurred");
-            }
-        };
-
-        fetchRoleDetails();
-    }, [roleId]);
+        if (role) {
+            setFormRole(role);
+        }
+    }, [role]);
 
     const [enums, setEnums] = useState<EnumValues>({
         grades: [],
@@ -94,7 +80,7 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setRole((prevRole) => ({
+        setFormRole((prevRole) => ({
             ...prevRole,
             [name]: value,
         }));
@@ -102,23 +88,41 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log("Submitting role:", role);
-        console.log("Role state before submission:", role);
+        console.log("Submitting role:", formRole);
+        console.log("Role state before submission:", formRole);
         try {
-            const response = await fetch(`/staffing-manager/update-role/${role.roleId}`, {
+            const response = await fetch(`/staffing-manager/update-role/${formRole.roleId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(role),
+                body: JSON.stringify(formRole),
             });
 
             if (response.ok) {
-                console.log("Role updated successfully");
-                setSuccessMessage("Role updated successfully.");
+                const updatedRole = await response.json();
+                console.log("Role updated successfully", updatedRole);
+                setSuccessMessage("Role updated successfully!");
                 setTimeout(() => {
-                    onClose();
+                    setSuccessMessage("");
                 }, 2000);
+
+                // clear form fields after successful submission
+                setFormRole({
+                    roleId: 0,
+                    roleName: "",
+                    gradeRequired: "",
+                    department: "",
+                    location: "",
+                    staffingManagerEmailAddress: localStorage.getItem("staffingManagerEmailAddress") || "",
+                    duration: "",
+                    client: "",
+                    jobDescription: "",
+                    startDate: "",
+                    securityClearanceRequired: "",
+                });
+
+                onRoleUpdate(updatedRole);
             } else {
                 console.error("Failed to update role");
             }
@@ -136,7 +140,7 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
                 throw new Error("Failed to fetch role details. Please provide a valid Role ID.");
             }
             const data = await response.json();
-            setRole(data);
+            setFormRole(data);
         } catch (err) {
             console.error(err instanceof Error ? err.message : "An error occurred");
         } finally {
@@ -166,7 +170,7 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
                         </Col>
                         <Col md={6} className="d-flex align-items-end">
                             <Button
-                                variant="info"
+                                variant="outline-info"
                                 onClick={fetchRoleDetails}
                             >
                                 {fetchingRole ? "Fetching..." : "Get Role Details"}
@@ -184,7 +188,7 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
                                 id="roleName"
                                 name="roleName"
                                 placeholder="Role Name"
-                                value={role.roleName}
+                                value={formRole.roleName}
                                 onChange={handleChange}
                                 required
                             />
@@ -198,7 +202,7 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
                                 id="location"
                                 name="location"
                                 placeholder="Location"
-                                value={role.location}
+                                value={formRole.location}
                                 onChange={handleChange}
                                 required
                             />
@@ -214,7 +218,7 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
                                 className="form-control"
                                 id="gradeRequired"
                                 name="gradeRequired"
-                                value={role.gradeRequired}
+                                value={formRole.gradeRequired}
                                 onChange={handleChange}
                                 required
                             >
@@ -234,7 +238,7 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
                                 className="form-control"
                                 id="department"
                                 name="department"
-                                value={role.department}
+                                value={formRole.department}
                                 onChange={handleChange}
                                 required
                             >
@@ -259,7 +263,7 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
                                 name="staffingManagerEmailAddress"
                                 type="email"
                                 placeholder="Staffing Manager Email Address"
-                                value={role.staffingManagerEmailAddress}
+                                value={formRole.staffingManagerEmailAddress}
                                 onChange={handleChange}
                                 required
                             />
@@ -274,7 +278,7 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
                                 name="startDate"
                                 type="date"
                                 placeholder="Start Date"
-                                value={role.startDate}
+                                value={formRole.startDate}
                                 onChange={handleChange}
                                 required
                             />
@@ -290,7 +294,7 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
                                 className="form-control"
                                 id="duration"
                                 name="duration"
-                                value={role.duration}
+                                value={formRole.duration}
                                 onChange={handleChange}
                                 required
                             >
@@ -310,7 +314,7 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
                                 className="form-control"
                                 id="securityClearanceRequired"
                                 name="securityClearanceRequired"
-                                value={role.securityClearanceRequired}
+                                value={formRole.securityClearanceRequired}
                                 onChange={handleChange}
                                 required
                             >
@@ -328,7 +332,7 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
                                 id="client"
                                 name="client"
                                 placeholder="Client"
-                                value={role.client}
+                                value={formRole.client}
                                 onChange={handleChange}
                                 required
                             />
@@ -345,24 +349,19 @@ const UpdateRoleForm = ({ roleId, onClose }: UpdateRoleFormProps) => {
                                 id="jobDescription"
                                 name="jobDescription"
                                 placeholder="Job Description"
-                                value={role.jobDescription}
+                                value={formRole.jobDescription}
                                 onChange={handleChange}
                                 required
                                 style={{ minHeight: "250px" }}
                             />
                         </Col>
                     </Row>
-
                     {successMessage && (
                         <div className="alert alert-success" role="alert">
                             {successMessage}
                         </div>
                     )}
-
                     <div className="d-flex gap-2">
-                        <Button variant="secondary" onClick={onClose}>
-                            Cancel
-                        </Button>
                         <Button variant="primary" type="submit" className="w-100">
                             Update Role
                         </Button>

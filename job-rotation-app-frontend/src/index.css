@@ -24,4 +24,9 @@ body,
 body {
   margin: 0;
 }
-
+ 
+*/
+.custom-backdrop {
+  background-color: rgba(0, 0, 0, 0.2) !important; 
+   /* make backdrop of modals lighter */
+}

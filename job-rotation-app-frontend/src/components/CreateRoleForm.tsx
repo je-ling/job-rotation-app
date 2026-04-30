@@ -24,12 +24,7 @@ type EnumValues = {
     durations: string[];
 };
 
-type CreateRoleFormProps = {
-    onClose: () => void;
-    onRoleCreated: () => void;
-};
-
-const CreateRoleForm = ({ onClose, onRoleCreated }: CreateRoleFormProps) => {
+const CreateRoleForm = ({ onRoleCreated }: { onRoleCreated: (newRole: Role) => void }) => {
     const [successMessage, setSuccessMessage] = useState("");
 
     const [role, setRole] = useState<Role>({
@@ -105,13 +100,28 @@ const CreateRoleForm = ({ onClose, onRoleCreated }: CreateRoleFormProps) => {
             });
 
             if (response.ok) {
-                console.log("Role created successfully");
+                const newRole = await response.json();
+                console.log("Role created successfully", newRole);
                 setSuccessMessage("Role created successfully!");
                 setTimeout(() => {
                     setSuccessMessage("");
-                    onRoleCreated();
-                    onClose();
                 }, 2000);
+
+                // clear form fields after successful submission
+                setRole({
+                    roleId: 0,
+                    roleName: "",
+                    gradeRequired: "",
+                    department: "",
+                    location: "",
+                    staffingManagerEmailAddress: localStorage.getItem("staffingManagerEmailAddress") || "",
+                    duration: "",
+                    client: "",
+                    jobDescription: "",
+                    startDate: "",
+                    securityClearanceRequired: "",
+                });
+                onRoleCreated(newRole);
             } else {
                 console.error("Failed to create role");
             }
@@ -303,17 +313,12 @@ const CreateRoleForm = ({ onClose, onRoleCreated }: CreateRoleFormProps) => {
                             />
                         </Col>
                     </Row>
-
                     {successMessage && (
                         <div className="alert alert-success" role="alert">
                             {successMessage}
                         </div>
                     )}
-
                     <div className="d-flex gap-2">
-                        <Button variant="secondary" onClick={onClose}>
-                            Cancel
-                        </Button>
                         <Button variant="primary" type="submit" className="w-100">
                             Submit Role
                         </Button>

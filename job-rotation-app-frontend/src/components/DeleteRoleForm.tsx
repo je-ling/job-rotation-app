@@ -24,30 +24,29 @@ type EnumValues = {
     durations: string[];
 };
 
-type DeleteRoleFormProps = {
-    onClose: () => void;
-};
 
-const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
-    const [role, setRole] = useState<Role>({
-        roleId: 0,
-        roleName: "",
-        gradeRequired: "",
-        department: "",
-        location: "",
-        staffingManagerEmailAddress: "",
-        duration: "",
-        client: "",
-        jobDescription: "",
-        startDate: "",
-        securityClearanceRequired: "",
-    });
-
+const DeleteRoleForm = ({ role, onRoleDelete }: { role: Role | null; onRoleDelete: (deletedRole: Role) => void }) => {
     const [enums, setEnums] = useState<EnumValues>({
         grades: [],
         departments: [],
         durations: [],
     });
+
+    const [formRole, setFormRole] = useState<Role>(
+        role || {
+            roleId: 0,
+            roleName: "",
+            gradeRequired: "",
+            department: "",
+            location: "",
+            staffingManagerEmailAddress: "",
+            duration: "",
+            client: "",
+            jobDescription: "",
+            startDate: "",
+            securityClearanceRequired: "",
+        }
+    );
 
     const [loading, setLoading] = useState(true);
     const [roleIdInput, setRoleIdInput] = useState("");
@@ -75,7 +74,7 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setRole((prevRole) => ({
+        setFormRole((prevRole) => ({
             ...prevRole,
             [name]: value,
         }));
@@ -83,10 +82,10 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log("Submitting role:", role);
-        console.log("Role state before submission:", role);
+        console.log("Submitting role:", formRole);
+        console.log("Role state before submission:", formRole);
         try {
-            const response = await fetch(`/staffing-manager/delete-role/${role.roleId}`, {
+            const response = await fetch(`/staffing-manager/delete-role/${formRole.roleId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -97,8 +96,25 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                 console.log("Role deleted successfully");
                 setSuccessMessage("Role deleted successfully.");
                 setTimeout(() => {
-                    onClose();
+                    setSuccessMessage("");
                 }, 2000);
+
+                // clear form fields after successful submission
+                setFormRole({
+                    roleId: 0,
+                    roleName: "",
+                    gradeRequired: "",
+                    department: "",
+                    location: "",
+                    staffingManagerEmailAddress: localStorage.getItem("staffingManagerEmailAddress") || "",
+                    duration: "",
+                    client: "",
+                    jobDescription: "",
+                    startDate: "",
+                    securityClearanceRequired: "",
+                });
+
+                onRoleDelete(formRole);
             } else {
                 console.error("Failed to delete role");
             }
@@ -116,7 +132,7 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                 throw new Error("Failed to fetch role details. Please provide a valid Role ID.");
             }
             const data = await response.json();
-            setRole(data);
+            setFormRole(data);
         } catch (err) {
             console.error(err instanceof Error ? err.message : "An error occurred");
         } finally {
@@ -164,7 +180,7 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                                 id="roleName"
                                 name="roleName"
                                 placeholder="Role Name"
-                                value={role.roleName}
+                                value={formRole.roleName}
                                 onChange={handleChange}
                                 required
                             />
@@ -178,7 +194,7 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                                 id="location"
                                 name="location"
                                 placeholder="Location"
-                                value={role.location}
+                                value={formRole.location}
                                 onChange={handleChange}
                                 required
                             />
@@ -194,7 +210,7 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                                 className="form-control"
                                 id="gradeRequired"
                                 name="gradeRequired"
-                                value={role.gradeRequired}
+                                value={formRole.gradeRequired}
                                 onChange={handleChange}
                                 required
                             >
@@ -214,7 +230,7 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                                 className="form-control"
                                 id="department"
                                 name="department"
-                                value={role.department}
+                                value={formRole.department}
                                 onChange={handleChange}
                                 required
                             >
@@ -239,7 +255,7 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                                 name="staffingManagerEmailAddress"
                                 type="email"
                                 placeholder="Staffing Manager Email Address"
-                                value={role.staffingManagerEmailAddress}
+                                value={formRole.staffingManagerEmailAddress}
                                 onChange={handleChange}
                                 required
                             />
@@ -254,7 +270,7 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                                 name="startDate"
                                 type="date"
                                 placeholder="Start Date"
-                                value={role.startDate}
+                                value={formRole.startDate}
                                 onChange={handleChange}
                                 required
                             />
@@ -270,7 +286,7 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                                 className="form-control"
                                 id="duration"
                                 name="duration"
-                                value={role.duration}
+                                value={formRole.duration}
                                 onChange={handleChange}
                                 required
                             >
@@ -290,6 +306,7 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                                 className="form-control"
                                 id="securityClearanceRequired"
                                 name="securityClearanceRequired"
+                                value={formRole.securityClearanceRequired}
                                 onChange={handleChange}
                                 required
                             >
@@ -307,7 +324,7 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                                 id="client"
                                 name="client"
                                 placeholder="Client"
-                                value={role.client}
+                                value={formRole.client}
                                 onChange={handleChange}
                                 required
                             />
@@ -324,24 +341,19 @@ const DeleteRoleForm = ({ onClose }: DeleteRoleFormProps) => {
                                 id="jobDescription"
                                 name="jobDescription"
                                 placeholder="Job Description"
-                                value={role.jobDescription}
+                                value={formRole.jobDescription}
                                 onChange={handleChange}
                                 required
                                 style={{ minHeight: "250px" }}
                             />
                         </Col>
                     </Row>
-
                     {successMessage && (
                         <div className="alert alert-success" role="alert">
                             {successMessage}
                         </div>
                     )}
-
                     <div className="d-flex gap-2">
-                        <Button variant="secondary" onClick={onClose}>
-                            Cancel
-                        </Button>
                         <Button variant="outline-danger" type="submit" className="w-100">
                             Delete Role
                         </Button>

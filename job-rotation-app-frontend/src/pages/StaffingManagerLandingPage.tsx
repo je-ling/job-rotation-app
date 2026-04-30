@@ -1,84 +1,90 @@
 import Container from "react-bootstrap/esm/Container";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
 import Footer from "../components/FooterBar";
 import CreateRoleForm from "../components/CreateRoleForm";
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
 import StaffingManagerNavBar from "../components/StaffingManagerNavBar";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import UpdateRoleForm from "../components/UpdateRoleForm";
 import DeleteRoleForm from "../components/DeleteRoleForm";
 import StaffingManagerListRolesTable from "../components/StaffingManagerListRolesTable";
+import { Tab, Tabs } from "react-bootstrap";
 
 
 export const StaffingManagerLandingPage = () => {
-    const [showCreateModal, setShowCreateModal] = useState(false);
-    const [showUpdateModal, setShowUpdateModal] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    type Role = {
+        roleId: number;
+        roleName: string;
+        gradeRequired: string;
+        department: string;
+        location: string;
+        staffingManagerEmailAddress: string;
+        duration: string;
+        client: string;
+        jobDescription: string;
+        startDate: string;
+        securityClearanceRequired: string;
+    };
 
+    const [roles, setRoles] = useState<Role[]>([]);
+    const [filteredRoles, setFilteredRoles] = useState<Role[]>([]);
+    const [error, setError] = useState<string | null>(null);
+    const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
 
-    const handleCloseCreate = () => setShowCreateModal(false);
-    const handleShowCreate = () => setShowCreateModal(true);
+    useEffect(() => {
+        const fetchRoles = async () => {
+            try {
+                const response = await fetch('/staffing-manager/get-all-roles');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch roles');
+                }
+                const data: Role[] = await response.json();
+                setRoles(data);
+                setFilteredRoles(data);
+            } catch (err: any) {
+                setError(err.message);
+            }
+        };
+        fetchRoles();
+    }, []);
 
-    const handleCloseUpdate = () => setShowUpdateModal(false);
-    const handleShowUpdate = () => setShowUpdateModal(true);
-
-    const handleCloseDelete = () => setShowDeleteModal(false);
-    const handleShowDelete = () => setShowDeleteModal(true);
+    const resetFilters = () => {
+        setFilteredRoles(roles);
+    };
 
     return (
         <>
             <StaffingManagerNavBar />
-            <Container style={{ marginTop: "10px", maxWidth: "700px", padding: "30px", paddingLeft: '60px' }}>
-                <Row >
-                    <Col style={{ marginRight: '15px', marginLeft: '15px'}}>
-                        <Button variant="primary" style={{ width: '180px' }} size="lg" onClick={handleShowCreate} className="mt-4">
-                            Create New Role
-                        </Button>
-                    </Col>
-                    <Col style={{ marginRight: '15px', marginLeft: '15px' }}>
-                        <Button variant="success" size="lg" onClick={handleShowUpdate} className="mt-4">
-                            Update Role
-                        </Button>
-                    </Col>
-                    <Col style={{ marginRight: '15px', marginLeft: '15px' }}>
-                        <Button variant="danger" size="lg" onClick={handleShowDelete} className="mt-4">
-                            Delete Role
-                        </Button>
-                    </Col>
-                </Row>
-            </Container>
-
-            <Modal show={showCreateModal} onHide={handleCloseCreate} size="lg" centered scrollable>
-                <Modal.Header closeButton>
-                    <Modal.Title style={{ marginLeft: "auto" }}>Create Job Role</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <CreateRoleForm onClose={handleCloseCreate} onRoleCreated={handleCloseCreate} />
-                </Modal.Body>
-            </Modal>
-
-            <Modal show={showUpdateModal} onHide={handleCloseUpdate} size="lg" centered scrollable>
-                <Modal.Header closeButton>
-                    <Modal.Title style={{ marginLeft: "auto" }}>Update Job Role</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <UpdateRoleForm onClose={handleCloseUpdate} roleId={0} />
-                </Modal.Body>
-            </Modal>
-
-            <Modal show={showDeleteModal} onHide={handleCloseDelete} size="lg" centered scrollable>
-                <Modal.Header closeButton>
-                    <Modal.Title style={{ marginLeft: "auto" }}>Delete Job Role</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <DeleteRoleForm onClose={handleCloseDelete} />
-                </Modal.Body>
-            </Modal>
-
-            <Container style={{ marginTop: "5px", maxWidth: "700px", textAlign: "center" }}>
-                <StaffingManagerListRolesTable />
+            <Container style={{ marginTop: "10px", maxWidth: "870px", padding: "30px", paddingLeft: '60px' }}>
+                <Tabs
+                    defaultActiveKey="view-roles"
+                    id="fill-tab-example"
+                    className="mb-3"
+                    fill
+                >
+                    <Tab eventKey="view-roles" title="View Roles">
+                        <StaffingManagerListRolesTable roles={filteredRoles} onRolesUpdate={setFilteredRoles} onResetFilters={resetFilters} />
+                    </Tab>
+                    <Tab eventKey="create" title="Create Role">
+                        <CreateRoleForm onRoleCreated={(newRole) => {
+                            setRoles((prevRoles) => [...prevRoles, newRole]);
+                            setFilteredRoles((prevFilteredRoles) => [...prevFilteredRoles, newRole]);
+                        }} />
+                    </Tab>
+                    <Tab eventKey="update-role" title="Update Role">
+                        <UpdateRoleForm
+                            role={roles.find((r) => r.roleId === selectedRoleId) || null}
+                            onRoleUpdate={(updatedRole) => {
+                                setRoles((prevRoles) => prevRoles.map((role) => role.roleId === updatedRole.roleId ? updatedRole : role));
+                                setFilteredRoles((prevFilteredRoles) => prevFilteredRoles.map((role) => role.roleId === updatedRole.roleId ? updatedRole : role));
+                            }} />
+                    </Tab>
+                    <Tab eventKey="delete-role" title="Delete Role">
+                        <DeleteRoleForm role={roles.find((r) => r.roleId === selectedRoleId) || null}
+                            onRoleDelete={(deletedRole) => {
+                                setRoles((prevRoles) => prevRoles.filter((role) => role.roleId !== deletedRole.roleId));
+                                setFilteredRoles((prevFilteredRoles) => prevFilteredRoles.filter((role) => role.roleId !== deletedRole.roleId));
+                            }} />
+                    </Tab>
+                </Tabs>
             </Container>
             <Footer />
         </>
