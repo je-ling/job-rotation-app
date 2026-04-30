@@ -1,7 +1,7 @@
 import Container from "react-bootstrap/esm/Container";
 import Footer from "../components/FooterBar";
 import CreateRoleForm from "../components/CreateRoleForm";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import StaffingManagerNavBar from "../components/StaffingManagerNavBar";
 import UpdateRoleForm from "../components/UpdateRoleForm";
 import DeleteRoleForm from "../components/DeleteRoleForm";
@@ -26,8 +26,8 @@ export const StaffingManagerLandingPage = () => {
 
     const [roles, setRoles] = useState<Role[]>([]);
     const [filteredRoles, setFilteredRoles] = useState<Role[]>([]);
-    const [error, setError] = useState<string | null>(null);
-    const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
+    const [, setError] = useState<string | null>(null);
+    const [selectedRoleId,] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchRoles = async () => {
