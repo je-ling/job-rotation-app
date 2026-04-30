@@ -7,6 +7,7 @@ import UpdateRoleForm from "../components/UpdateRoleForm";
 import DeleteRoleForm from "../components/DeleteRoleForm";
 import StaffingManagerListRolesTable from "../components/StaffingManagerListRolesTable";
 import { Tab, Tabs } from "react-bootstrap";
+import DataCharts from "../components/DataCharts";
 
 
 export const StaffingManagerLandingPage = () => {
@@ -53,7 +54,7 @@ export const StaffingManagerLandingPage = () => {
     return (
         <>
             <StaffingManagerNavBar />
-            <Container style={{ marginTop: "10px", maxWidth: "870px", padding: "30px", paddingLeft: '60px' }}>
+            <Container style={{ marginTop: "10px", maxWidth: "1400px", padding: "30px", paddingLeft: '60px' }}>
                 <Tabs
                     defaultActiveKey="view-roles"
                     id="fill-tab-example"
@@ -83,6 +84,9 @@ export const StaffingManagerLandingPage = () => {
                                 setRoles((prevRoles) => prevRoles.filter((role) => role.roleId !== deletedRole.roleId));
                                 setFilteredRoles((prevFilteredRoles) => prevFilteredRoles.filter((role) => role.roleId !== deletedRole.roleId));
                             }} />
+                    </Tab>
+                    <Tab eventKey="charts" title="Charts">
+                        <DataCharts/>
                     </Tab>
                 </Tabs>
             </Container>
