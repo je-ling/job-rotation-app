@@ -5,12 +5,12 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import logo from '../assets/logo1.png';
 import { useState } from "react";
-import RotationProcessModal from "./RotationProcessModal";
-import ExpressInterestModal from './ExpressInterestModal';
-import GtdSupportModal from './GtdSupportModal';
-import PeopleSupportModal from './PeopleSupportModal';
-import QuestionsModal from './QuestionsModal';
-import ContactListModal from './ContactListModal';
+import RotationProcessModal from "./resource-modals/RotationProcessModal";
+import ExpressInterestModal from './resource-modals/ExpressInterestModal';
+import GtdSupportModal from './resource-modals/GtdSupportModal';
+import PeopleSupportModal from './resource-modals/PeopleSupportModal';
+import QuestionsModal from './resource-modals/QuestionsModal';
+import ContactListModal from './resource-modals/ContactListModal';
 
 function EmployeeNavBar() {
   const [showModal, setShowModal] = useState(false);
@@ -70,12 +70,12 @@ function EmployeeNavBar() {
               <Offcanvas.Body>
                 <Nav className="justify-content-end flex-grow-1 pe-3">
                   <Nav.Link href="/">Home</Nav.Link>
-                  <Nav.Link href="#action2">FAQs</Nav.Link>
+                  <Nav.Link onClick={handleShowQuestionsModal}>FAQs</Nav.Link>
                   <NavDropdown
                     title="Resources"
                     id={`offcanvasNavbarDropdown-expand-${expand}`}
                   >
-                    <NavDropdown.Item onClick={handleShowModal}>Rotation Process</NavDropdown.Item>
+                    <NavDropdown.Item onClick={handleShowModal}>Rotation Process </NavDropdown.Item>
                     <NavDropdown.Item onClick={handleShowExpressInterestModal}> Express Interest in a Role </NavDropdown.Item>
                     <NavDropdown.Item onClick={handleShowGtdSupportModal}> GTD Support </NavDropdown.Item>
                     <NavDropdown.Item onClick={handleShowPeopleSupportModal}> People Support </NavDropdown.Item>

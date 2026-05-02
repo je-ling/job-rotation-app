@@ -1,5 +1,5 @@
 import Modal from "react-bootstrap/Modal";
-import support from '../assets/support.jpeg';
+import support from '../../assets/support.jpeg';
 
 type PeopleSupportModalProps = {
     show: boolean;

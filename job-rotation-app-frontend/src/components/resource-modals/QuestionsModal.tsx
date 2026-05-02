@@ -7,7 +7,7 @@ type QuestionsModalProps = {
 
 const QuestionsModal = ({ show, onClose }: QuestionsModalProps) => {
     return (
-        <Modal show={show} onHide={onClose} centered>
+        <Modal show={show} onHide={onClose} centered size="lg" aria-labelledby="example-modal-sizes-title-lg">
             <Modal.Header closeButton>
                 <Modal.Title>Frequently Asked Questions</Modal.Title>
             </Modal.Header>
