@@ -12,7 +12,7 @@ type Role = {
     location: string;
     staffingManagerEmailAddress: string;
     duration: string;
-    client: string
+    client: string;
     jobDescription: string;
     startDate: string;
     securityClearanceRequired: string;
@@ -29,85 +29,73 @@ const searchFilter = (roles: Role[], query: string): Role[] => {
     });
 }
 
-const ListRolesTable: React.FC = () => {
-    const [roles, setRoles] = useState<Role[]>([]);
-    const [allRoles, setAllRoles] = useState<Role[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    const [searchQuery, setSearchQuery] = useState('');
+type EmployeeListRolesTableProps = {
+    roles: Role[];
+    onResetFilters: () => void;
+    onRolesUpdate: (updatedRoles: Role[]) => void;
+};
 
+const ListRolesTable: React.FC<EmployeeListRolesTableProps> = ({ roles, onResetFilters, onRolesUpdate }) => {
+    const [searchQuery, setSearchQuery] = useState('');
     const [showJobModal, setShowJobModal] = useState(false);
     const handleCloseJob = () => setShowJobModal(false);
-    const handleShowJob = () => setShowJobModal(true);
+    const handleShowJob = (role: Role) => {
+        setSelectedJobRole(role);
+        setShowJobModal(true);
+    };
 
     const [showFiltersModal, setShowFiltersModal] = useState(false);
     const handleCloseFiltersJob = () => setShowFiltersModal(false);
     const handleShowFiltersJob = () => setShowFiltersModal(true);
 
-    useEffect(() => {
-        const fetchRoles = async () => {
-            try {
-                const response = await fetch('/employee/list-available-roles');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch roles');
-                }
-                const data: Role[] = await response.json();
-                setRoles(data);
-                setAllRoles(data);
-            } catch (err: any) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchRoles();
-    }, []);
-
-    if (loading) {
-        return <p>Loading roles...</p>;
-    }
-
-    if (error) {
-        return <p>Error: {error}</p>;
-    }
+    const [selectedJobRole, setSelectedJobRole] = useState<Role | null>(null);
 
     const filteredRoles = searchFilter(roles, searchQuery);
 
     return (
         <div>
-            <div style={{ marginLeft: '55px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', paddingLeft: '10px' }}>
-                    <Form.Control
-                        type="text"
-                        placeholder="Search"
-                        value={searchQuery}
-                        className="me-2"
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    <Button variant="outline-primary" onClick={handleShowFiltersJob}>Filters</Button>
-                </div>
-                <Modal show={showFiltersModal} onHide={handleCloseFiltersJob} size="lg" centered scrollable>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', width: '100%' }}>
+                <Form.Control
+                    type="text"
+                    placeholder="Search"
+                    value={searchQuery}
+                    className="me-2"
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <Button variant="outline-primary" onClick={handleShowFiltersJob}>Filters</Button>
+                <Button variant="outline-secondary" onClick={onResetFilters}>Reset</Button>
+
+                <Modal
+                    size="lg"
+                    show={showFiltersModal}
+                    onHide={handleCloseFiltersJob}
+                    backdropClassName="custom-backdrop"
+                    centered
+                    scrollable
+                >
                     <Modal.Header closeButton>
                         <Modal.Title style={{ marginLeft: "auto" }}>Filter Job Roles</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <FiltersForm onClose={handleCloseFiltersJob} onApply={(filters) => {
-                            const filteredRoles = allRoles.filter((role) => {
-                                return (
-                                    (filters.grade === "" || role.gradeRequired === filters.grade) &&
-                                    (filters.department === "" || role.department === filters.department) &&
-                                    (filters.duration === "" || role.duration === filters.duration) &&
-                                    (filters.client === "" || role.client.toLowerCase().includes(filters.client.toLowerCase()))
-                                );
-                            });
-                            setRoles(filteredRoles);
-                            handleCloseFiltersJob();
-                        }} />
+                        <FiltersForm
+                            onClose={handleCloseFiltersJob}
+                            onApply={(filters) => {
+                                const filteredRoles = roles.filter((role) => {
+                                    return (
+                                        (filters.grade === "" || role.gradeRequired === filters.grade) &&
+                                        (filters.department === "" || role.department === filters.department) &&
+                                        (filters.duration === "" || role.duration === filters.duration) &&
+                                        (filters.client === "" || role.client.toLowerCase().includes(filters.client.toLowerCase()))
+                                    );
+                                });
+                                onRolesUpdate(filteredRoles);
+                                handleCloseFiltersJob();
+                            }}
+                        />
                     </Modal.Body>
                 </Modal>
             </div>
-            <Table striped bordered hover style={{ fontSize: '15px', textAlign: 'center' }}>
+            <Table striped bordered hover style={{ fontSize: '15px', paddingLeft: '10px' }}>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -129,22 +117,29 @@ const ListRolesTable: React.FC = () => {
                             <td>{role.staffingManagerEmailAddress}</td>
                             <td>{role.client}</td>
                             <td>
-                                <Modal show={showJobModal} onHide={handleCloseJob} size="lg" centered scrollable>
+                                <button className="btn btn-primary" onClick={() => handleShowJob(role)}>View</button>
+                                <Modal
+                                    size="lg"
+                                    show={showJobModal}
+                                    onHide={handleCloseJob}
+                                    backdropClassName="custom-backdrop"
+                                    centered
+                                    scrollable
+                                >
                                     <Modal.Header closeButton>
-                                        <Modal.Title style={{ marginLeft: "auto" }}>{role.roleName}</Modal.Title>
+                                        <Modal.Title style={{ marginLeft: "auto" }}>{selectedJobRole?.roleName}</Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body>
-                                        <JobRoleInformationForm role={role} />
+                                        {selectedJobRole && <JobRoleInformationForm role={selectedJobRole} />}
                                     </Modal.Body>
                                 </Modal>
-                                <button className="btn btn-primary" onClick={handleShowJob}>View</button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </Table>
-        </div>
-    );
+        </div >
+    )
 };
 
 export default ListRolesTable;

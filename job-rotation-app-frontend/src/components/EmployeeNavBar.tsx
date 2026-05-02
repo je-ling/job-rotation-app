@@ -50,7 +50,7 @@ function EmployeeNavBar() {
               height="45"
               alt="Company Logo"
             />
-            <Navbar.Brand style={{ fontSize: '2.5rem', color: 'white', textAlign: 'center', marginRight: '40px' }} href="/">
+            <Navbar.Brand style={{ fontSize: '3.0rem', color: 'white', textAlign: 'center', marginRight: '40px', fontFamily: 'Bebas Neue'}} href="/">
               NEXT STEP
             </Navbar.Brand>
             <Navbar.Toggle
