@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,4 +37,14 @@ public class Roles {
 
   private String jobDescription;
 
+  private String location;
+
+  private String startDate;
+
+  private String client;
+
+  private String securityClearanceRequired;
+
+  @Version
+  private Integer version;
 }

@@ -43,12 +43,12 @@ class EmployeeBusinessServiceTest {
     Roles role = new Roles();
     roles.add(role);
 
-    when(rolesRepository.findAllRoles()).thenReturn(roles);
+    when(rolesRepository.findAll()).thenReturn(roles);
 
     List<Roles> result = employeeBusinessService.getAvailableRoles();
 
     assertEquals(roles, result);
-    verify(rolesRepository, times(1)).findAllRoles();
+    verify(rolesRepository, times(1)).findAll();
   }
 
   @Test
@@ -77,12 +77,12 @@ class EmployeeBusinessServiceTest {
     role.setDepartment(department);
     roles.add(role);
 
-    when(rolesRepository.findByDepartmentRequired(department)).thenReturn(roles);
+    when(rolesRepository.findByDepartment(department)).thenReturn(roles);
 
     List<Roles> result = employeeBusinessService.getAvailableRolesByDepartment(department);
 
     assertEquals(roles, result);
-    verify(rolesRepository, times(1)).findByDepartmentRequired(department);
+    verify(rolesRepository, times(1)).findByDepartment(department);
   }
 
   @Test
@@ -94,12 +94,12 @@ class EmployeeBusinessServiceTest {
     role.setDuration(duration);
     roles.add(role);
 
-    when(rolesRepository.findByDurationSpecified(duration)).thenReturn(roles);
+    when(rolesRepository.findByDuration(duration)).thenReturn(roles);
 
     List<Roles> result = employeeBusinessService.getAvailableRolesByDuration(duration);
 
     assertEquals(roles, result);
-    verify(rolesRepository, times(1)).findByDurationSpecified(duration);
+    verify(rolesRepository, times(1)).findByDuration(duration);
   }
 
   @Test
@@ -133,22 +133,20 @@ class EmployeeBusinessServiceTest {
   @Test
   @DisplayName("When getAvailableRolesByMultiFilters is called then it should return roles matching all specified filters")
   void getAvailableRolesByMultiFiltersReturnsFilteredRoles() {
-    Departments department = Departments.DEVELOPMENT;
-    Duration duration = Duration.THREE_MONTHS;
-    Grades grade = Grades.GRADE_3;
     List<Roles> roles = new ArrayList<>();
     Roles role = new Roles();
-    role.setDepartment(department);
-    role.setDuration(duration);
-    role.setGradeRequired(grade);
+    role.setDepartment(Departments.DEVELOPMENT);
+    role.setDuration(Duration.THREE_MONTHS);
+    role.setGradeRequired(Grades.GRADE_3);
+    role.setClient("Angligan Water");
     roles.add(role);
 
-    when(rolesRepository.findAllRoles()).thenReturn(roles);
+    when(rolesRepository.findAll()).thenReturn(roles);
 
-    List<Roles> result = employeeBusinessService.getAvailableRolesByMultiFilters(grade, department,
-        duration);
+    List<Roles> result = employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3,
+        Departments.DEVELOPMENT, Duration.THREE_MONTHS, "Angligan Water");
 
     assertEquals(roles, result);
-    verify(rolesRepository, times(1)).findAllRoles();
+    verify(rolesRepository, times(1)).findAll();
   }
 }

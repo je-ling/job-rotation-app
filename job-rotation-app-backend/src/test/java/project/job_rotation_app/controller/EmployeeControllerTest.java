@@ -367,14 +367,14 @@ public class EmployeeControllerTest {
     roles.add(role3);
 
     when(employeeBusinessService.getAvailableRolesByMultiFilters(Grades.GRADE_3, null,
-        Duration.NINE_MONTHS)).thenReturn(roles);
+        Duration.NINE_MONTHS, "HMRC")).thenReturn(roles);
 
     List<Roles> result = controller.getAvailableRolesByMultiFilters(Grades.GRADE_3,
-        null, Duration.NINE_MONTHS);
+        null, Duration.NINE_MONTHS, "HMRC");
 
     assertDoesNotThrow(
         () -> controller.getAvailableRolesByMultiFilters(Grades.GRADE_3, null,
-            Duration.NINE_MONTHS));
+            Duration.NINE_MONTHS, "HMRC"));
     assertDoesNotThrow(
         () -> result.size() == 2);
     assertDoesNotThrow(
@@ -422,14 +422,14 @@ public class EmployeeControllerTest {
     roles.add(role3);
 
     when(employeeBusinessService.getAvailableRolesByMultiFilters(null,
-        Departments.ARCHITECTURE, Duration.TWELVE_MONTHS)).thenReturn(roles);
+        Departments.ARCHITECTURE, Duration.TWELVE_MONTHS, "McDonalds")).thenReturn(roles);
 
     List<Roles> result = controller.getAvailableRolesByMultiFilters(null,
-        Departments.ARCHITECTURE, Duration.TWELVE_MONTHS);
+        Departments.ARCHITECTURE, Duration.TWELVE_MONTHS, "McDonald's");
 
     assertDoesNotThrow(
         () -> controller.getAvailableRolesByMultiFilters(null,
-            Departments.ARCHITECTURE, Duration.TWELVE_MONTHS));
+            Departments.ARCHITECTURE, Duration.TWELVE_MONTHS, "McDonald's"));
     assertDoesNotThrow(
         () -> result.isEmpty());
   }

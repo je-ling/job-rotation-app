@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import project.job_rotation_app.dto.LoginReqBody;
 import project.job_rotation_app.model.StaffingManagerUser;
 import project.job_rotation_app.repository.StaffingManagerRepository;
@@ -43,9 +42,9 @@ public class AuthBusinessServiceTest {
   void verifyLoginCredentialsReturnsOkForValidCredentials() {
     LoginReqBody userDetails = new LoginReqBody("test@example.com", "password123");
     StaffingManagerUser staffingManagerUser = new StaffingManagerUser();
-    staffingManagerUser.setEmailAddress(userDetails.getEmail());
-    staffingManagerUser.setPassword(new BCryptPasswordEncoder().encode(userDetails.getPassword()));
-    when(staffingManagerRepository.findByEmail(userDetails.getEmail())).thenReturn(
+    staffingManagerUser.setEmailAddress(userDetails.getEmailAddress());
+    staffingManagerUser.setPassword(userDetails.getPassword());
+    when(staffingManagerRepository.findByEmailAddress(userDetails.getEmailAddress())).thenReturn(
         Optional.of(staffingManagerUser));
 
     ResponseEntity<?> response = authBusinessService.verifyLoginCredentials(userDetails);
@@ -58,9 +57,9 @@ public class AuthBusinessServiceTest {
   void verifyLoginCredentialsReturnsUnauthorizedForInvalidCredentials() {
     LoginReqBody userDetails = new LoginReqBody("test@example.com", "wrongPassword");
     StaffingManagerUser staffingManagerUser = new StaffingManagerUser();
-    staffingManagerUser.setEmailAddress(userDetails.getEmail());
-    staffingManagerUser.setPassword(new BCryptPasswordEncoder().encode("password123"));
-    when(staffingManagerRepository.findByEmail(userDetails.getEmail())).thenReturn(
+    staffingManagerUser.setEmailAddress(userDetails.getEmailAddress());
+//    staffingManagerUser.setPassword(new BCryptPasswordEncoder().encode("password123"));
+    when(staffingManagerRepository.findByEmailAddress(userDetails.getEmailAddress())).thenReturn(
         Optional.of(staffingManagerUser));
 
     ResponseEntity<?> response = authBusinessService.verifyLoginCredentials(userDetails);

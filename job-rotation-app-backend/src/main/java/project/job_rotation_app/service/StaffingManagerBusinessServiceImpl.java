@@ -19,7 +19,7 @@ public class StaffingManagerBusinessServiceImpl {
   RolesRepository rolesRepository;
 
   public List<Roles> getAvailableRoles() {
-    return rolesRepository.findAllRoles();
+    return rolesRepository.findAll();
   }
 
   public List<Roles> getAvailableRolesByGrade(Grades grade) {
@@ -27,16 +27,16 @@ public class StaffingManagerBusinessServiceImpl {
   }
 
   public List<Roles> getAvailableRolesByDepartment(Departments department) {
-    return rolesRepository.findByDepartmentRequired(department);
+    return rolesRepository.findByDepartment(department);
   }
 
   public List<Roles> getAvailableRolesByDuration(Duration duration) {
-    return rolesRepository.findByDurationSpecified(duration);
+    return rolesRepository.findByDuration(duration);
   }
 
   public List<Roles> getAvailableRolesByMultiFilters(Grades grade, Departments department,
       Duration duration) {
-    return rolesRepository.findAllRoles().stream()
+    return rolesRepository.findAll().stream()
         .filter(r -> grade == null || r.getGradeRequired() == grade)
         .filter(r -> department == null || r.getDepartment() == department)
         .filter(r -> duration == null || r.getDuration() == duration)
@@ -58,19 +58,27 @@ public class StaffingManagerBusinessServiceImpl {
     roleInformationDto.setGradeRequired(role.getGradeRequired().toString());
     roleInformationDto.setJobDescription(role.getJobDescription());
     roleInformationDto.setStaffingManagerEmailAddress(role.getStaffingManagerEmailAddress());
+    roleInformationDto.setLocation(role.getLocation());
+    roleInformationDto.setStartDate(role.getStartDate());
+    roleInformationDto.setSecurityClearanceRequired(role.getSecurityClearanceRequired());
 
     return role;
   }
 
   public Roles createRole(Roles role) {
-    if (role.getRoleName().isEmpty() ||
+    if (role.getRoleName() == null || role.getRoleName().isEmpty() ||
         role.getDepartment() == null ||
         role.getJobDescription().isEmpty() ||
         role.getDuration() == null ||
         role.getGradeRequired() == null ||
-        role.getStaffingManagerEmailAddress().isEmpty()) {
+        role.getStaffingManagerEmailAddress().isEmpty() || role.getLocation().isEmpty() || role.getStartDate() == null) {
+
       throw new BadRequestException("Required fields of create role request cannot be empty");
     }
+
+    role.setRoleId(null);
+    role.setVersion(0);
+
     return rolesRepository.save(role);
   }
 
@@ -86,6 +94,7 @@ public class StaffingManagerBusinessServiceImpl {
     existingRole.setDuration(updatedRole.getDuration());
     existingRole.setGradeRequired(updatedRole.getGradeRequired());
     existingRole.setStaffingManagerEmailAddress(updatedRole.getStaffingManagerEmailAddress());
+    existingRole.setVersion(existingRole.getVersion() + 1);
 
     return rolesRepository.save(existingRole);
   }

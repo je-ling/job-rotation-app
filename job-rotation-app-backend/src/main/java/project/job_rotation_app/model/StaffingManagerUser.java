@@ -18,6 +18,8 @@ public class StaffingManagerUser {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long userId;
 
+  private String firstName;
+  private String lastName;
   private String emailAddress;
   private String password;
 }

@@ -7,11 +7,11 @@ import lombok.Setter;
 @Setter
 public class LoginReqBody {
 
-  private String email;
+  private String emailAddress;
   private String password;
 
-  public LoginReqBody(String email, String password) {
-    this.email = email;
+  public LoginReqBody(String emailAddress, String password) {
+    this.emailAddress = emailAddress;
     this.password = password;
   }
 }

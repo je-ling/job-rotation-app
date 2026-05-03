@@ -4,7 +4,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import project.job_rotation_app.model.StaffingManagerUser;
 
-public interface StaffingManagerRepository extends JpaRepository<StaffingManagerUser, String> {
+public interface StaffingManagerRepository extends JpaRepository<StaffingManagerUser, Long> {
 
-  Optional<StaffingManagerUser> findByEmail(String email);
+  Optional<StaffingManagerUser> findByEmailAddress(String emailAddress);
 }

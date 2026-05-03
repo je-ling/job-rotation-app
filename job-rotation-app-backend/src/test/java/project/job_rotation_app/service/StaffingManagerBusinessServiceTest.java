@@ -10,7 +10,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,6 +48,9 @@ public class StaffingManagerBusinessServiceTest {
     role.setDuration(Duration.THREE_MONTHS);
     role.setGradeRequired(Grades.GRADE_3);
     role.setStaffingManagerEmailAddress("test@example.com");
+    role.setLocation("London");
+    role.setSecurityClearanceRequired("YES");
+    role.setStartDate("01-01-2026");
 
     when(rolesRepository.save(role)).thenReturn(role);
 
@@ -84,6 +86,10 @@ public class StaffingManagerBusinessServiceTest {
     existingRole.setDuration(Duration.THREE_MONTHS);
     existingRole.setGradeRequired(Grades.GRADE_3);
     existingRole.setStaffingManagerEmailAddress("test@example.com");
+    existingRole.setLocation("London");
+    existingRole.setSecurityClearanceRequired("YES");
+    existingRole.setStartDate("01-01-2026");
+    existingRole.setVersion(0);
 
     Roles updatedRole = new Roles();
     updatedRole.setRoleId(123L);
@@ -93,6 +99,9 @@ public class StaffingManagerBusinessServiceTest {
     updatedRole.setDuration(Duration.SIX_MONTHS);
     updatedRole.setGradeRequired(Grades.GRADE_5);
     updatedRole.setStaffingManagerEmailAddress("test@example.com");
+    updatedRole.setLocation("London");
+    updatedRole.setSecurityClearanceRequired("YES");
+    updatedRole.setStartDate("01-01-2026");
 
     when(rolesRepository.findByRoleId(123L)).thenReturn(existingRole);
     when(rolesRepository.save(existingRole)).thenReturn(existingRole);
@@ -153,12 +162,12 @@ public class StaffingManagerBusinessServiceTest {
     Roles role = new Roles();
     roles.add(role);
 
-    when(rolesRepository.findAllRoles()).thenReturn(roles);
+    when(rolesRepository.findAll()).thenReturn(roles);
 
     List<Roles> result = staffingManagerBusinessService.getAvailableRoles();
 
     assertEquals(roles, result);
-    verify(rolesRepository, times(1)).findAllRoles();
+    verify(rolesRepository, times(1)).findAll();
   }
 
   @Test
@@ -187,12 +196,12 @@ public class StaffingManagerBusinessServiceTest {
     role.setDepartment(department);
     roles.add(role);
 
-    when(rolesRepository.findByDepartmentRequired(department)).thenReturn(roles);
+    when(rolesRepository.findByDepartment(department)).thenReturn(roles);
 
     List<Roles> result = staffingManagerBusinessService.getAvailableRolesByDepartment(department);
 
     assertEquals(roles, result);
-    verify(rolesRepository, times(1)).findByDepartmentRequired(department);
+    verify(rolesRepository, times(1)).findByDepartment(department);
   }
 
   @Test
@@ -204,12 +213,12 @@ public class StaffingManagerBusinessServiceTest {
     role.setDuration(duration);
     roles.add(role);
 
-    when(rolesRepository.findByDurationSpecified(duration)).thenReturn(roles);
+    when(rolesRepository.findByDuration(duration)).thenReturn(roles);
 
     List<Roles> result = staffingManagerBusinessService.getAvailableRolesByDuration(duration);
 
     assertEquals(roles, result);
-    verify(rolesRepository, times(1)).findByDurationSpecified(duration);
+    verify(rolesRepository, times(1)).findByDuration(duration);
   }
 
   @Test
@@ -225,14 +234,14 @@ public class StaffingManagerBusinessServiceTest {
     role.setGradeRequired(grade);
     roles.add(role);
 
-    when(rolesRepository.findAllRoles()).thenReturn(roles);
+    when(rolesRepository.findAll()).thenReturn(roles);
 
     List<Roles> result = staffingManagerBusinessService.getAvailableRolesByMultiFilters(grade,
         department,
         duration);
 
     assertEquals(roles, result);
-    verify(rolesRepository, times(1)).findAllRoles();
+    verify(rolesRepository, times(1)).findAll();
   }
 
   @Test
