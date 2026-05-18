@@ -34,7 +34,7 @@ const UpdateRoleForm = ({ role, onRoleUpdate }: { role: Role | null; onRoleUpdat
             gradeRequired: "",
             department: "",
             location: "",
-            staffingManagerEmailAddress: "",
+            staffingManagerEmailAddress: localStorage.getItem("staffingManagerEmailAddress") || "",
             duration: "",
             client: "",
             jobDescription: "",
@@ -121,7 +121,7 @@ const UpdateRoleForm = ({ role, onRoleUpdate }: { role: Role | null; onRoleUpdat
                     startDate: "",
                     securityClearanceRequired: "",
                 });
-
+                setRoleIdInput("");
                 onRoleUpdate(updatedRole);
             } else {
                 console.error("Failed to update role");
@@ -134,19 +134,25 @@ const UpdateRoleForm = ({ role, onRoleUpdate }: { role: Role | null; onRoleUpdat
     const fetchRoleDetails = async () => {
         if (!roleIdInput) return;
         setFetchingRole(true);
+        setErrorMessage("");
         try {
             const response = await fetch(`/staffing-manager/available-roles/${roleIdInput}`);
             if (!response.ok) {
-                throw new Error("Failed to fetch role details. Please provide a valid Role ID.");
+                setErrorMessage("Please provide a valid Role ID.");
+                setTimeout(() => {
+                    setErrorMessage("");
+                }, 2000);
             }
             const data = await response.json();
             setFormRole(data);
         } catch (err) {
-            console.error(err instanceof Error ? err.message : "An error occurred");
+            setErrorMessage(err instanceof Error ? err.message : "An error occurred");
         } finally {
             setFetchingRole(false);
         }
     };
+
+    const [errorMessage, setErrorMessage] = useState("");
 
     return (
         <>
@@ -177,6 +183,12 @@ const UpdateRoleForm = ({ role, onRoleUpdate }: { role: Role | null; onRoleUpdat
                             </Button>
                         </Col>
                     </Row>
+
+                    {errorMessage && (
+                        <div className="alert alert-danger" role="alert">
+                            {errorMessage}
+                        </div>
+                    )}
 
                     <Row className="mb-3">
                         <Col md={6}>
