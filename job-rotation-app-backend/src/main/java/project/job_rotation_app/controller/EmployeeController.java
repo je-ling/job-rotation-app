@@ -62,11 +62,11 @@ public class EmployeeController {
   public Map<String, List<String>> getEnumValues() {
     Map<String, List<String>> enums = new HashMap<>();
     enums.put("grades", Arrays.asList(
-        Arrays.stream(Grades.values()).map(Enum::name).toArray(String[]::new)));
+        Arrays.stream(Grades.values()).map(Grades::toString).toArray(String[]::new)));
     enums.put("departments", Arrays.asList(
-        Arrays.stream(Departments.values()).map(Enum::name).toArray(String[]::new)));
+        Arrays.stream(Departments.values()).map(Departments::toString).toArray(String[]::new)));
     enums.put("durations", Arrays.asList(
-        Arrays.stream(Duration.values()).map(Enum::name).toArray(String[]::new)));
+        Arrays.stream(Duration.values()).map(Duration::toString).toArray(String[]::new)));
     return enums;
   }
 }

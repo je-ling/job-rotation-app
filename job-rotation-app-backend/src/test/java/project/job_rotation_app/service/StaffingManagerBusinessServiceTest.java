@@ -49,7 +49,7 @@ public class StaffingManagerBusinessServiceTest {
     role.setGradeRequired(Grades.GRADE_3);
     role.setStaffingManagerEmailAddress("test@example.com");
     role.setLocation("London");
-    role.setSecurityClearanceRequired("YES");
+    role.setSecurityClearanceRequired("Yes");
     role.setStartDate("01-01-2026");
 
     when(rolesRepository.save(role)).thenReturn(role);
@@ -87,7 +87,7 @@ public class StaffingManagerBusinessServiceTest {
     existingRole.setGradeRequired(Grades.GRADE_3);
     existingRole.setStaffingManagerEmailAddress("test@example.com");
     existingRole.setLocation("London");
-    existingRole.setSecurityClearanceRequired("YES");
+    existingRole.setSecurityClearanceRequired("Yes");
     existingRole.setStartDate("01-01-2026");
     existingRole.setVersion(0);
 
@@ -100,7 +100,7 @@ public class StaffingManagerBusinessServiceTest {
     updatedRole.setGradeRequired(Grades.GRADE_5);
     updatedRole.setStaffingManagerEmailAddress("test@example.com");
     updatedRole.setLocation("London");
-    updatedRole.setSecurityClearanceRequired("YES");
+    updatedRole.setSecurityClearanceRequired("Yes");
     updatedRole.setStartDate("01-01-2026");
 
     when(rolesRepository.findByRoleId(123L)).thenReturn(existingRole);
