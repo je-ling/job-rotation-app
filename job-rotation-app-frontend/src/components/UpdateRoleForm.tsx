@@ -193,7 +193,7 @@ const UpdateRoleForm = ({ role, onRoleUpdate }: { role: Role | null; onRoleUpdat
                     <Row className="mb-3">
                         <Col md={6}>
                             <label htmlFor="roleName" className="form-label">
-                                Role Name
+                                Role Name <span style={{ color: 'red' }}>*</span>
                             </label>
                             <input
                                 className="form-control"
@@ -207,7 +207,7 @@ const UpdateRoleForm = ({ role, onRoleUpdate }: { role: Role | null; onRoleUpdat
                         </Col>
                         <Col md={6}>
                             <label htmlFor="location" className="form-label">
-                                Location
+                                Location <span style={{ color: 'red' }}>*</span>
                             </label>
                             <input
                                 className="form-control"
@@ -224,7 +224,7 @@ const UpdateRoleForm = ({ role, onRoleUpdate }: { role: Role | null; onRoleUpdat
                     <Row className="mb-3">
                         <Col md={6}>
                             <label htmlFor="gradeRequired" className="form-label">
-                                Grade Required
+                                Grade Required <span style={{ color: 'red' }}>*</span>
                             </label>
                             <select
                                 className="form-control"
@@ -244,7 +244,7 @@ const UpdateRoleForm = ({ role, onRoleUpdate }: { role: Role | null; onRoleUpdat
                         </Col>
                         <Col md={6}>
                             <label htmlFor="department" className="form-label">
-                                Department
+                                Department <span style={{ color: 'red' }}>*</span>
                             </label>
                             <select
                                 className="form-control"
@@ -267,7 +267,7 @@ const UpdateRoleForm = ({ role, onRoleUpdate }: { role: Role | null; onRoleUpdat
                     <Row className="mb-3">
                         <Col md={6}>
                             <label htmlFor="staffingManagerEmailAddress" className="form-label">
-                                Staffing Manager Email Address
+                                Staffing Manager Email Address <span style={{ color: 'red' }}>*</span>
                             </label>
                             <input
                                 className="form-control"
@@ -282,7 +282,7 @@ const UpdateRoleForm = ({ role, onRoleUpdate }: { role: Role | null; onRoleUpdat
                         </Col>
                         <Col md={6}>
                             <label htmlFor="startDate" className="form-label">
-                                Start Date
+                                Start Date <span style={{ color: 'red' }}>*</span>
                             </label>
                             <input
                                 className="form-control"
@@ -300,7 +300,7 @@ const UpdateRoleForm = ({ role, onRoleUpdate }: { role: Role | null; onRoleUpdat
                     <Row className="mb-3">
                         <Col md={4}>
                             <label htmlFor="duration" className="form-label">
-                                Duration
+                                Duration <span style={{ color: 'red' }}>*</span>
                             </label>
                             <select
                                 className="form-control"
@@ -320,7 +320,7 @@ const UpdateRoleForm = ({ role, onRoleUpdate }: { role: Role | null; onRoleUpdat
                         </Col>
                         <Col md={4}>
                             <label htmlFor="securityClearanceRequired" className="form-label">
-                                SC Eligible / Required
+                                SC Eligible / Required <span style={{ color: 'red' }}>*</span>
                             </label>
                             <select
                                 className="form-control"
@@ -337,7 +337,7 @@ const UpdateRoleForm = ({ role, onRoleUpdate }: { role: Role | null; onRoleUpdat
                         </Col>
                         <Col md={4}>
                             <label htmlFor="client" className="form-label">
-                                Client
+                                Client <span style={{ color: 'red' }}>*</span>
                             </label>
                             <input
                                 className="form-control"
@@ -354,7 +354,7 @@ const UpdateRoleForm = ({ role, onRoleUpdate }: { role: Role | null; onRoleUpdat
                     <Row className="mb-3">
                         <Col md={12}>
                             <label htmlFor="jobDescription" className="form-label">
-                                Job Description
+                                Job Description <span style={{ color: 'red' }}>*</span>
                             </label>
                             <textarea
                                 className="form-control"
