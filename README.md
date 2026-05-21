@@ -87,7 +87,8 @@ To run the backend application itself:
 2. Create a database connection with connection name: 'job_rotation_db', port: 3306, username: root, password: new_password, and hostname: 127.0.0.1
 3. Create a schema named job_rotation_db
 3. Run .gradlew bootRun within the job-rotation-app-backend directory to spin up the backend - this will create the necessary tables required for the application
-4. Execute the SQL code within the 'data.sql' file within MySQL workbench for data to use while running the application. 
+4. Update the data type for grade_required, department, duration to VARCHAR(50) and job_description to VARCHAR(1000)
+5. Execute the SQL code within the 'data.sql' file within MySQL workbench for data to use while running the application. 
 
 ## Troubleshoot
 - Data not rendering? - ensure the backend is running before running the frontend

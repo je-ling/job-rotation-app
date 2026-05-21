@@ -323,8 +323,8 @@ const DeleteRoleForm = ({ role, onRoleDelete }: { role: Role | null; onRoleDelet
                                 required
                             >
                                 <option value="">Select Option</option>
-                                <option value="YES">YES</option>
-                                <option value="NO">NO</option>
+                                <option value="YES">Yes</option>
+                                <option value="NO">No</option>
                             </select>
                         </Col>
                         <Col md={4}>
