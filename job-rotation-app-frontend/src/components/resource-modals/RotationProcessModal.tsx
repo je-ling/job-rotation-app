@@ -1,6 +1,5 @@
 import Modal from "react-bootstrap/Modal";
-import careerGrow from '../../assets/career-grow.png';
-import rotationProcess from '../../assets/rotation-process.png';
+import rotationProcess from '../../assets/rotation-process-1.png';
 
 type RotationProcessModalProps = {
     show: boolean;

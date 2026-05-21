@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import project.job_rotation_app.dto.LoginReqBody;
-import project.job_rotation_app.model.StaffingManagerUser;
 import project.job_rotation_app.repository.StaffingManagerRepository;
 
 @Service
@@ -33,7 +32,6 @@ public class AuthBusinessServiceImpl {
       return ResponseEntity.ok().build();
     } else {
       return ResponseEntity.status(401).body("Invalid email or password");
-      // unauthorised status returned
     }
   }
 }
