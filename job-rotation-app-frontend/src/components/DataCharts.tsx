@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { PieChart, Pie, Tooltip, Cell, BarChart, Bar, Legend, YAxis, XAxis, CartesianGrid, AreaChart, Area } from "recharts";
-import { Row, Col, Container } from "react-bootstrap";
+import { Row, Col, Container, Button } from "react-bootstrap";
 
 export const DataCharts = () => {
 
@@ -21,19 +21,20 @@ export const DataCharts = () => {
   const [roles, setRoles] = useState<Role[]>([]);
   const [, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchRoles = async () => {
-      try {
-        const response = await fetch('/staffing-manager/get-all-roles');
-        if (!response.ok) {
-          throw new Error('Failed to fetch roles');
-        }
-        const data: Role[] = await response.json();
-        setRoles(data);
-      } catch (err: any) {
-        setError(err.message);
+  const fetchRoles = async () => {
+    try {
+      const response = await fetch('/staffing-manager/get-all-roles');
+      if (!response.ok) {
+        throw new Error('Failed to fetch roles');
       }
-    };
+      const data: Role[] = await response.json();
+      setRoles(data);
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  useEffect(() => {
     fetchRoles();
   }, []);
 
@@ -86,6 +87,9 @@ export const DataCharts = () => {
           <div style={{ border: "1px solid #ccc", borderRadius: "6px", padding: "15px", marginTop: "18px", textAlign: "center", width: "2340px" }}>
             <h3>Total Open Roles</h3>
             <p style={{ fontSize: "24px", fontWeight: "bold" }}>{roles.length}</p>
+            <Button variant="outline-primary" onClick={fetchRoles}>
+              Refresh Data
+            </Button>
           </div>
         </Col>
       </Row>
