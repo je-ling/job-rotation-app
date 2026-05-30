@@ -21,8 +21,9 @@ public class AuthController {
 
   @PostMapping("/staffing-manager/login")
   public ResponseEntity<?> loginStaffingManager(
-      @RequestBody LoginReqBody loginDetails) {
-    return authBusinessService.verifyLoginCredentials(loginDetails);
+      @RequestBody LoginReqBody loginDetails,
+      HttpServletResponse response) {
+    return authBusinessService.verifyLoginCredentials(loginDetails, response);
   }
 
   @PostMapping("/logout")

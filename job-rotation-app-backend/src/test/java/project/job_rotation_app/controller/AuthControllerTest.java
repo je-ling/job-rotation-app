@@ -4,9 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -45,16 +47,17 @@ public class AuthControllerTest {
     authController.authBusinessService = authBusinessService;
 
     LoginReqBody loginDetails = new LoginReqBody("test@example.com", "password123");
+    HttpServletResponse mockResponse = mock(HttpServletResponse.class);
 
     doReturn(ResponseEntity.ok(Map.of("token", "mock-jwt-token")))
-        .when(authBusinessService).verifyLoginCredentials(loginDetails);
+        .when(authBusinessService).verifyLoginCredentials(loginDetails, mockResponse);
 
-    ResponseEntity<?> response = authController.loginStaffingManager(loginDetails);
+    ResponseEntity<?> response = authController.loginStaffingManager(loginDetails, mockResponse);
 
     assertNotNull(response);
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertEquals("mock-jwt-token", ((Map<?, ?>) response.getBody()).get("token"));
-    verify(authBusinessService).verifyLoginCredentials(loginDetails);
+    verify(authBusinessService).verifyLoginCredentials(loginDetails, mockResponse);
   }
 
   @Test
@@ -63,10 +66,12 @@ public class AuthControllerTest {
     AuthController authController = new AuthController();
     authController.authBusinessService = authBusinessService;
 
-    when(authBusinessService.verifyLoginCredentials(null)).thenReturn(
+    HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+
+    when(authBusinessService.verifyLoginCredentials(null, mockResponse)).thenReturn(
         ResponseEntity.badRequest().build());
 
-    ResponseEntity<?> response = authController.loginStaffingManager(null);
+    ResponseEntity<?> response = authController.loginStaffingManager(null, mockResponse);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
   }
@@ -79,10 +84,12 @@ public class AuthControllerTest {
 
     LoginReqBody loginDetails = new LoginReqBody("", "password123");
 
-    when(authBusinessService.verifyLoginCredentials(loginDetails)).thenReturn(
+    HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+
+    when(authBusinessService.verifyLoginCredentials(loginDetails, mockResponse)).thenReturn(
         ResponseEntity.badRequest().build());
 
-    ResponseEntity<?> response = authController.loginStaffingManager(loginDetails);
+    ResponseEntity<?> response = authController.loginStaffingManager(loginDetails, mockResponse);
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
   }
 
@@ -94,10 +101,12 @@ public class AuthControllerTest {
 
     LoginReqBody loginDetails = new LoginReqBody("test@example.com", "");
 
-    when(authBusinessService.verifyLoginCredentials(loginDetails)).thenReturn(
+    HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+
+    when(authBusinessService.verifyLoginCredentials(loginDetails, mockResponse)).thenReturn(
         ResponseEntity.badRequest().build());
 
-    ResponseEntity<?> response = authController.loginStaffingManager(loginDetails);
+    ResponseEntity<?> response = authController.loginStaffingManager(loginDetails, mockResponse);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
   }

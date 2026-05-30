@@ -1,5 +1,7 @@
 package project.job_rotation_app.service;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +33,8 @@ public class AuthBusinessServiceImpl {
         .orElse(false);
   }
 
-  public ResponseEntity<?> verifyLoginCredentials(LoginReqBody userDetails) {
+  public ResponseEntity<?> verifyLoginCredentials(LoginReqBody userDetails,
+      HttpServletResponse response) {
     if (userDetails == null || userDetails.getEmailAddress() == null ||
         userDetails.getPassword() == null || userDetails.getEmailAddress().isEmpty()
         || userDetails.getPassword().isEmpty()) {
@@ -46,6 +49,13 @@ public class AuthBusinessServiceImpl {
               user.getEmailAddress(),
               String.valueOf(user.getUserId())
           );
+
+          Cookie cookie = new Cookie("jwt", jwtToken);
+          cookie.setHttpOnly(true);
+          cookie.setPath("/");
+          cookie.setMaxAge(3600); 
+          response.addCookie(cookie);
+
           return ResponseEntity.ok().body(Map.of("token", jwtToken));
         })
         .orElse(ResponseEntity.status(401)

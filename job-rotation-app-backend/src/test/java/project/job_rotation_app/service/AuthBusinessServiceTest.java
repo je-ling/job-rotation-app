@@ -3,8 +3,10 @@ package project.job_rotation_app.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,7 +57,10 @@ public class AuthBusinessServiceTest {
         .thenReturn(Optional.of(staffingManagerUser));
     when(jwtUtil.generateToken(anyString(), anyString())).thenReturn("example-token");
 
-    ResponseEntity<?> response = authBusinessService.verifyLoginCredentials(userDetails);
+    HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+
+    ResponseEntity<?> response = authBusinessService.verifyLoginCredentials(userDetails,
+        mockResponse);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
   }
@@ -69,7 +74,10 @@ public class AuthBusinessServiceTest {
     when(staffingManagerRepository.findByEmailAddress(userDetails.getEmailAddress())).thenReturn(
         Optional.of(staffingManagerUser));
 
-    ResponseEntity<?> response = authBusinessService.verifyLoginCredentials(userDetails);
+    HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+
+    ResponseEntity<?> response = authBusinessService.verifyLoginCredentials(userDetails,
+        mockResponse);
 
     assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     assertEquals(Map.of("Error", "Invalid email or password provided."), response.getBody());
