@@ -48,7 +48,7 @@ public class StaffingManagerController {
   }
 
   @GetMapping("/available-roles/{roleId}")
-  public Roles getRoleDetails(@PathVariable Long roleId) {
+  public Roles getRoleDetails(@PathVariable Long roleId) throws Exception {
     return staffingManagerBusinessService.getRoleDetails(roleId);
   }
 
@@ -56,9 +56,10 @@ public class StaffingManagerController {
   public List<Roles> getAvailableRolesByMultiFilters(
       @RequestParam(required = false) Grades grade,
       @RequestParam(required = false) Departments department,
-      @RequestParam(required = false) Duration duration) {
+      @RequestParam(required = false) Duration duration,
+      @RequestParam(required = false) String client) {
     return staffingManagerBusinessService.getAvailableRolesByMultiFilters(grade, department,
-        duration);
+        duration, client);
   }
 
   @GetMapping("/enums")
@@ -74,12 +75,13 @@ public class StaffingManagerController {
   }
 
   @PostMapping("/create-role")
-  public Roles createRole(@RequestBody Roles role) {
+  public Roles createRole(@RequestBody Roles role) throws Exception {
     return staffingManagerBusinessService.createRole(role);
   }
 
   @PutMapping("/update-role/{roleId}")
-  public Roles updateRole(@PathVariable Long roleId, @RequestBody Roles updatedRole) {
+  public Roles updateRole(@PathVariable Long roleId, @RequestBody Roles updatedRole)
+      throws Exception {
     return staffingManagerBusinessService.updateRole(roleId, updatedRole);
   }
 

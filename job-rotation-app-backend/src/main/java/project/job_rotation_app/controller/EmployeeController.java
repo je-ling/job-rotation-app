@@ -54,7 +54,7 @@ public class EmployeeController {
   }
 
   @GetMapping("/available-roles/{roleId}")
-  public Roles getRoleDetails(@PathVariable Long roleId) {
+  public Roles getRoleDetails(@PathVariable Long roleId) throws Exception {
     return employeeBusinessService.getRoleDetails(roleId);
   }
 

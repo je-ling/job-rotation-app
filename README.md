@@ -86,15 +86,34 @@ To run the backend application itself:
 
 Unit tests implemented for the backend can be located at - job-rotation-app-backend/src/test/java/project/job_rotation_app
 
+### Test Coverage
+- Overall project test coverage = 86%
+- Methods test coverage = 100%
+- Lines test coverage = 93%+
+- To obtain the below results in IntelliJ run tests with coverage for the directory `job-rotation-app-backend/src/test/java/project/job_rotation_app` and view in 'Coverage' tab.
+![Alt Text](test-coverage.png "Test Coverage")
+
+### Security and Authentication 
+
+JWT (JSON Web Tokens) has been implemented alongisde the authentication mechniasm to securely manager staffing manager login and protect API backend endpoints
+- User logins, credentials authenticated and a JWT token is generated.
+- Secure - ensures sensitive user data isn't stored on the server between requests.
+- JWT stored in a cookie - prevents JavaScript from accessing the cookie, preventing XSS (Cross-Site Scripting) attacks.
+
+BCrypt Hashing has been utilised for password storage, in the database user passwords are hashed before being inserted into the database. This ensures plain text passwords are not stored and follows best practices to ensure user credentials remain protected.
+- For testing purposes, the passwords for the staffing manager users is 'pass'.
+- https://bcrypt.online/ : used to hash plain text passwords before being added to the database.
+
 ## Database
 
 1. Install MySQL Workbench
 2. Create a database connection with connection name: 'job_rotation_db', port: 3306, username: root, password: new_password, and hostname: 127.0.0.1
-3. Create a schema named job_rotation_db
-4. Run .gradlew bootRun within the job-rotation-app-backend directory to spin up the backend - this will create the necessary tables required for the application
-5. Update the data type for grade_required, department, duration to VARCHAR(50) and job_description to VARCHAR(1000)
-6. Execute the SQL code within the 'data.sql' file within MySQL workbench for data to use while running the application.
+3. Create a schema named job_rotation_db.
+4. Run .gradlew bootRun within the job-rotation-app-backend directory to spin up the backend - this will create the necessary tables required for the application.
+5. Update the table using the ALTER SQL statements.
+6. Execute the INSERT SQL statements within the 'data.sql' file in MySQL workbench for data to use while running the application.
 
 ## Troubleshoot
 
 - Data not rendering? - ensure the backend is running before running the frontend
+- Issues in data truncation error appearing? - truncate the roles and staffing_managers tables to be emptied. Rerun the backend and add in the SQL statements from data.sql

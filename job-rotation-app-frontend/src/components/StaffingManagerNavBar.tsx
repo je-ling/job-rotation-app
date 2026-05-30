@@ -6,12 +6,24 @@ import logo from '../assets/logo1.png';
 
 export function StaffingManagerNavBar() {
   const [managerName, setManagerName] = useState("");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const logout = () => {
-    localStorage.removeItem("staffingManagerName");
-    localStorage.removeItem("staffingManagerEmailAddress");
+  const logout = async () => {
+    setIsLoggingOut(true);
 
-    window.location.href = "/login";
+    try {
+      await fetch("/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Logout request failed:", error);
+    } finally {
+      localStorage.removeItem("staffingManagerLoggedIn");
+      localStorage.removeItem("staffingManagerName");
+      localStorage.removeItem("staffingManagerEmailAddress");
+      window.location.href = "/login";
+    }
   };
 
   useEffect(() => {
@@ -44,8 +56,8 @@ export function StaffingManagerNavBar() {
               <Navbar.Text style={{ marginRight: "10px", color: "white" }}>
                 Signed in as: {managerName || "USER"}
               </Navbar.Text>
-              <Button variant="outline-light" onClick={logout}>
-                Sign Out
+              <Button variant="outline-light" onClick={logout} disabled={isLoggingOut}>
+                {isLoggingOut ? "Signing Out..." : "Sign Out"}
               </Button>
             </div>
           </Container>

@@ -10,15 +10,16 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.coyote.BadRequestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import project.job_rotation_app.exception.BadRequestException;
 import project.job_rotation_app.model.Departments;
 import project.job_rotation_app.model.Duration;
 import project.job_rotation_app.model.Grades;
@@ -40,7 +41,7 @@ public class StaffingManagerBusinessServiceTest {
 
   @Test
   @DisplayName("When createRole gets called then it should save the role when all fields are valid and provided")
-  void createRoleSavesRoleWhenFieldsAreValid200() {
+  void createRoleSavesRoleWhenFieldsAreValid200() throws Exception {
     Roles role = new Roles();
     role.setRoleName("Developer");
     role.setDepartment(Departments.DEVELOPMENT);
@@ -77,7 +78,7 @@ public class StaffingManagerBusinessServiceTest {
 
   @Test
   @DisplayName("When updateRole gets called then it should update the role when all fields are valid and provided")
-  void updateRoleWhenAllFieldsAreProvided200() {
+  void updateRoleWhenAllFieldsAreProvided200() throws Exception {
     Roles existingRole = new Roles();
     existingRole.setRoleId(123L);
     existingRole.setRoleName("Developer");
@@ -227,18 +228,20 @@ public class StaffingManagerBusinessServiceTest {
     Departments department = Departments.DEVELOPMENT;
     Duration duration = Duration.THREE_MONTHS;
     Grades grade = Grades.GRADE_3;
+    String client = "client";
     List<Roles> roles = new ArrayList<>();
     Roles role = new Roles();
     role.setDepartment(department);
     role.setDuration(duration);
     role.setGradeRequired(grade);
+    role.setClient(client);
     roles.add(role);
 
     when(rolesRepository.findAll()).thenReturn(roles);
 
     List<Roles> result = staffingManagerBusinessService.getAvailableRolesByMultiFilters(grade,
         department,
-        duration);
+        duration, client);
 
     assertEquals(roles, result);
     verify(rolesRepository, times(1)).findAll();
@@ -254,7 +257,7 @@ public class StaffingManagerBusinessServiceTest {
 
   @Test
   @DisplayName("When getRoleDetails is called then it should return the role details when roleId provided is valid")
-  void getRoleDetailsReturnsRoleDetailsWhenRoleIdIsValid200() {
+  void getRoleDetailsReturnsRoleDetailsWhenRoleIdIsValid200() throws Exception {
     Roles role = new Roles();
     role.setRoleId(123L);
     role.setRoleName("Developer");

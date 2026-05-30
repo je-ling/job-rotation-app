@@ -2,10 +2,10 @@ package project.job_rotation_app.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.job_rotation_app.dto.RoleInformationDto;
-import project.job_rotation_app.exception.BadRequestException;
 import project.job_rotation_app.model.Departments;
 import project.job_rotation_app.model.Duration;
 import project.job_rotation_app.model.Grades;
@@ -44,7 +44,7 @@ public class EmployeeBusinessServiceImpl {
         .collect(Collectors.toList());
   }
 
-  public Roles getRoleDetails(Long roleId) {
+  public Roles getRoleDetails(Long roleId) throws Exception {
     if (roleId == null) {
       throw new BadRequestException("Role ID has not been provided");
     }
