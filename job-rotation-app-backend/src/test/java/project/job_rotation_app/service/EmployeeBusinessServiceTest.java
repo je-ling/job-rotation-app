@@ -10,13 +10,13 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.coyote.BadRequestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import project.job_rotation_app.exception.BadRequestException;
 import project.job_rotation_app.model.Departments;
 import project.job_rotation_app.model.Duration;
 import project.job_rotation_app.model.Grades;
@@ -111,7 +111,7 @@ class EmployeeBusinessServiceTest {
 
   @Test
   @DisplayName("When getRoleDetails is called then it should return role details when roleId provided is valid")
-  void getRoleDetailsReturnsRoleDetailsWhenRoleIdIsValid200() {
+  void getRoleDetailsReturnsRoleDetailsWhenRoleIdIsValid200() throws Exception {
     Roles role = new Roles();
     role.setRoleId(123L);
     role.setRoleName("Developer");

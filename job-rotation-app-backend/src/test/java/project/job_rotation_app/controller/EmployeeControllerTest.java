@@ -1,16 +1,20 @@
 package project.job_rotation_app.controller;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import org.apache.coyote.BadRequestException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import project.job_rotation_app.exception.BadRequestException;
 import project.job_rotation_app.model.Departments;
 import project.job_rotation_app.model.Duration;
 import project.job_rotation_app.model.Grades;
@@ -435,8 +439,52 @@ public class EmployeeControllerTest {
   }
 
   @Test
+  void getAvailableRolesByMultiFiltersReturnsAllWhenFiltersAreNotProvided() {
+    EmployeeController controller = new EmployeeController();
+    controller.employeeBusinessService = employeeBusinessService;
+
+    Roles role1 = new Roles();
+    role1.setGradeRequired(Grades.GRADE_3);
+    role1.setDepartment(Departments.DEVELOPMENT);
+    role1.setDuration(Duration.THREE_MONTHS);
+    role1.setClient("Client A");
+
+    Roles role2 = new Roles();
+    role2.setGradeRequired(Grades.GRADE_5);
+    role2.setDepartment(Departments.BUSINESS_OPERATIONS);
+    role2.setDuration(Duration.SIX_MONTHS);
+    role2.setClient("Client B");
+
+    List<Roles> roles = List.of(role1, role2);
+    when(employeeBusinessService.getAvailableRolesByMultiFilters(null, null, null, null))
+        .thenReturn(roles);
+
+    List<Roles> result = controller.getAvailableRolesByMultiFilters(null, null, null, null);
+
+    assertEquals(2, result.size());
+    verify(employeeBusinessService).getAvailableRolesByMultiFilters(null, null, null, null);
+  }
+
+
+  @Test
+  void getAvailableRolesByMultiFiltersReturnsEmptyWhenClientDoesNotMatch() {
+    Roles role = new Roles();
+    role.setGradeRequired(Grades.GRADE_3);
+    role.setDepartment(Departments.DEVELOPMENT);
+    role.setDuration(Duration.THREE_MONTHS);
+    role.setClient("Client A");
+
+    when(rolesRepository.findAll()).thenReturn(List.of(role));
+
+    List<Roles> result = employeeBusinessService.getAvailableRolesByMultiFilters(
+        Grades.GRADE_3, Departments.DEVELOPMENT, Duration.THREE_MONTHS, "Client B");
+
+    assertEquals(0, result.size());
+  }
+
+  @Test
   @DisplayName("When getRoleDetails is called with a valid role ID, then it should return the details of the role")
-  public void testGetRoleDetails200() {
+  public void testGetRoleDetails200() throws Exception {
     EmployeeController controller = new EmployeeController();
     controller.employeeBusinessService = employeeBusinessService;
 
@@ -467,11 +515,37 @@ public class EmployeeControllerTest {
 
   @Test
   @DisplayName("When getRoleDetails is called with a null RoleId, then it throw an BadRequestException")
-  public void testGetRoleDetailsNullRoleId200() {
+  public void testGetRoleDetailsNullRoleId200() throws Exception {
     EmployeeController controller = new EmployeeController();
     controller.employeeBusinessService = employeeBusinessService;
 
     when(employeeBusinessService.getRoleDetails(null)).thenThrow(BadRequestException.class);
     assertThrows(BadRequestException.class, () -> controller.getRoleDetails(null));
+  }
+
+  @Test
+  @DisplayName("When get enum values is called it should return all enum names for grades, departments and durations")
+  void getEnumValuesReturnsAllEnums() {
+    EmployeeController controller = new EmployeeController();
+
+    Map<String, List<String>> result = controller.getEnumValues();
+
+    List<String> expectedGrades = Arrays.stream(Grades.values())
+        .map(Grades::toString)
+        .toList();
+    List<String> expectedDepartments = Arrays.stream(Departments.values())
+        .map(Departments::toString)
+        .toList();
+    List<String> expectedDurations = Arrays.stream(Duration.values())
+        .map(Duration::toString)
+        .toList();
+
+    assertEquals(expectedGrades, result.get("grades"));
+    assertEquals(10, expectedGrades.size());
+    assertEquals(expectedDepartments, result.get("departments"));
+    assertEquals(8, expectedDepartments.size());
+    assertEquals(4, expectedDurations.size());
+    assertEquals(expectedDurations, result.get("durations"));
+    assertEquals(3, result.size());
   }
 }

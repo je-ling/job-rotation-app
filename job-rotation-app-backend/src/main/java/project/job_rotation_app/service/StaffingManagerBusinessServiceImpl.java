@@ -2,10 +2,10 @@ package project.job_rotation_app.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.job_rotation_app.dto.RoleInformationDto;
-import project.job_rotation_app.exception.BadRequestException;
 import project.job_rotation_app.model.Departments;
 import project.job_rotation_app.model.Duration;
 import project.job_rotation_app.model.Grades;
@@ -35,15 +35,16 @@ public class StaffingManagerBusinessServiceImpl {
   }
 
   public List<Roles> getAvailableRolesByMultiFilters(Grades grade, Departments department,
-      Duration duration) {
+      Duration duration, String client) {
     return rolesRepository.findAll().stream()
         .filter(r -> grade == null || r.getGradeRequired() == grade)
         .filter(r -> department == null || r.getDepartment() == department)
         .filter(r -> duration == null || r.getDuration() == duration)
+        .filter(r -> client == null || r.getClient() == client)
         .collect(Collectors.toList());
   }
 
-  public Roles getRoleDetails(Long roleId) {
+  public Roles getRoleDetails(Long roleId) throws Exception {
     if (roleId == null) {
       throw new BadRequestException("Role ID has not been provided");
     }
@@ -65,13 +66,14 @@ public class StaffingManagerBusinessServiceImpl {
     return role;
   }
 
-  public Roles createRole(Roles role) {
+  public Roles createRole(Roles role) throws Exception {
     if (role.getRoleName() == null || role.getRoleName().isEmpty() ||
         role.getDepartment() == null ||
         role.getJobDescription().isEmpty() ||
         role.getDuration() == null ||
         role.getGradeRequired() == null ||
-        role.getStaffingManagerEmailAddress().isEmpty() || role.getLocation().isEmpty() || role.getStartDate() == null) {
+        role.getStaffingManagerEmailAddress().isEmpty() || role.getLocation().isEmpty()
+        || role.getStartDate() == null) {
 
       throw new BadRequestException("Required fields of create role request cannot be empty");
     }
@@ -82,7 +84,7 @@ public class StaffingManagerBusinessServiceImpl {
     return rolesRepository.save(role);
   }
 
-  public Roles updateRole(Long roleId, Roles updatedRole) {
+  public Roles updateRole(Long roleId, Roles updatedRole) throws Exception {
     Roles existingRole = rolesRepository.findByRoleId(roleId);
     if (existingRole == null || !existingRole.getRoleId().equals(roleId)) {
       throw new BadRequestException("Role with the provided ID does not exist in the system");
