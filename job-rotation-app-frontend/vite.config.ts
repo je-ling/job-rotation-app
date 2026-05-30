@@ -6,6 +6,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      "/logout": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
       "/employee": {
         target: "http://localhost:8080",
         changeOrigin: true,
