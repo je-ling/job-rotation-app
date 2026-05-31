@@ -90,7 +90,7 @@ Unit tests implemented for the backend can be located at - job-rotation-app-back
 - Overall project test coverage = 86%
 - Methods test coverage = 100%
 - Lines test coverage = 94%+
-- To obtain the below results in IntelliJ run tests with coverage for the directory `job-rotation-app-backend/src/test/java/project/job_rotation_app` and view in 'Coverage' tab.
+- To obtain the below results in IntelliJ IDE, run tests with coverage for the directory `job-rotation-app-backend/src/test/java/project/job_rotation_app` and view in 'Coverage' tab.
 ![Alt Text](test-coverage.png "Test Coverage")
 
 ### Security and Authentication 
