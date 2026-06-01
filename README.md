@@ -86,6 +86,14 @@ To run the backend application itself:
 
 Unit tests implemented for the backend can be located at - job-rotation-app-backend/src/test/java/project/job_rotation_app
 
+### Peformance Tests
+- Gatling - performance testing tool
+- Implementation of user load and stress tests against the application located at job-rotation-app-backend/src/gatling/java
+- Run using ./gradlew gatlingRun
+- Select 0 for combined load tests or 31 for combines stress tests
+- Select other values to run tests indivdually 
+- Tests finished running? This will produce a html link that will open data charts of response times, requests and further information for performance metrics of APIs implemented
+
 ### Test Coverage
 - Overall project test coverage = 86%
 - Methods test coverage = 100%
