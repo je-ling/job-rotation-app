@@ -32,21 +32,6 @@ public class StaffingManagerController {
     return staffingManagerBusinessService.getAvailableRoles();
   }
 
-  @GetMapping("/list-available-roles/{grade}")
-  public List<Roles> getAvailableRolesByGrade(@PathVariable Grades grade) {
-    return staffingManagerBusinessService.getAvailableRolesByGrade(grade);
-  }
-
-  @GetMapping("/list-available-roles/{department}")
-  public List<Roles> getAvailableRolesByDepartment(@PathVariable Departments department) {
-    return staffingManagerBusinessService.getAvailableRolesByDepartment(department);
-  }
-
-  @GetMapping("/list-available-roles/{duration}")
-  public List<Roles> getAvailableRolesByDuration(@PathVariable Duration duration) {
-    return staffingManagerBusinessService.getAvailableRolesByDuration(duration);
-  }
-
   @GetMapping("/available-roles/{roleId}")
   public Roles getRoleDetails(@PathVariable Long roleId) throws Exception {
     return staffingManagerBusinessService.getRoleDetails(roleId);
