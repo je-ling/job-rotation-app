@@ -87,28 +87,32 @@ To run the backend application itself:
 Unit tests implemented for the backend can be located at - job-rotation-app-backend/src/test/java/project/job_rotation_app
 
 ### Peformance Tests
-- Gatling - performance testing tool
+
+- Gatling - performance testing tool - https://docs.gatling.io/ and https://docs.gatling.io/integrations/build-tools/gradle-plugin/
 - Implementation of user load and stress tests against the application located at job-rotation-app-backend/src/gatling/java
-- Run using ./gradlew gatlingRun
-- Select 0 for combined load tests or 31 for combines stress tests
-- Select other values to run tests indivdually 
+- Run using ./gradlew gatlingRun whilst in the job-rotation-app-backend directory
+- Select 0 for combined load tests or 31 for combined stress tests
+- Select other values to run tests indivdually
 - Tests finished running? This will produce a html link that will open data charts of response times, requests and further information for performance metrics of APIs implemented
 
 ### Test Coverage
+
 - Overall project test coverage = 86%
 - Methods test coverage = 100%
 - Lines test coverage = 94%+
 - To obtain the below results in IntelliJ IDE, run tests with coverage for the directory `job-rotation-app-backend/src/test/java/project/job_rotation_app` and view in 'Coverage' tab.
-![Alt Text](test-coverage.png "Test Coverage")
+  ![Alt Text](test-coverage.png "Test Coverage")
 
-### Security and Authentication 
+### Security and Authentication
 
 JWT (JSON Web Tokens) has been implemented alongisde the authentication mechniasm to securely manager staffing manager login and protect API backend endpoints
+
 - User logins, credentials authenticated and a JWT token is generated.
 - Secure - ensures sensitive user data isn't stored on the server between requests.
 - JWT stored in a cookie - prevents JavaScript from accessing the cookie, preventing XSS (Cross-Site Scripting) attacks.
 
 BCrypt Hashing has been utilised for password storage, in the database user passwords are hashed before being inserted into the database. This ensures plain text passwords are not stored and follows best practices to ensure user credentials remain protected.
+
 - For testing purposes, the passwords for the staffing manager users is 'pass'.
 - https://bcrypt.online/ : used to hash plain text passwords before being added to the database.
 
