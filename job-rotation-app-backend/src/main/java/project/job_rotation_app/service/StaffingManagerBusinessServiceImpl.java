@@ -69,11 +69,12 @@ public class StaffingManagerBusinessServiceImpl {
   public Roles createRole(Roles role) throws Exception {
     if (role.getRoleName() == null || role.getRoleName().isEmpty() ||
         role.getDepartment() == null ||
-        role.getJobDescription().isEmpty() ||
+        role.getJobDescription() == null || role.getJobDescription().isEmpty() ||
         role.getDuration() == null ||
         role.getGradeRequired() == null ||
-        role.getStaffingManagerEmailAddress().isEmpty() || role.getLocation().isEmpty()
-        || role.getStartDate() == null) {
+        role.getStaffingManagerEmailAddress() == null || role.getStaffingManagerEmailAddress().isEmpty() ||
+        role.getLocation() == null || role.getLocation().isEmpty() ||
+        role.getStartDate() == null || role.getSecurityClearanceRequired() == null) {
 
       throw new BadRequestException("Required fields of create role request cannot be empty");
     }
@@ -96,6 +97,9 @@ public class StaffingManagerBusinessServiceImpl {
     existingRole.setDuration(updatedRole.getDuration());
     existingRole.setGradeRequired(updatedRole.getGradeRequired());
     existingRole.setStaffingManagerEmailAddress(updatedRole.getStaffingManagerEmailAddress());
+    existingRole.setLocation(updatedRole.getLocation());
+    existingRole.setStartDate(updatedRole.getStartDate());
+    existingRole.setSecurityClearanceRequired(updatedRole.getSecurityClearanceRequired());
     existingRole.setVersion(existingRole.getVersion() + 1);
 
     return rolesRepository.save(existingRole);
