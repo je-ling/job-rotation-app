@@ -101,8 +101,9 @@ Unit tests implemented for the backend can be located at - job-rotation-app-back
 
 - Gatling - performance testing tool - https://docs.gatling.io/ and https://docs.gatling.io/integrations/build-tools/gradle-plugin/
 - Implementation of user load and stress tests against the application located at job-rotation-app-backend/src/gatling/java
-- Run using ./gradlew gatlingRun whilst in the job-rotation-app-backend directory
-- Ensure the database is populated with the data from data.sql.
+- Run ./gradlew bootRun in a terminal
+- Run ./gradlew gatlingRun in another terminal whilst in the job-rotation-app-backend directory
+- Ensure the database is populated with the data from data.sql 
 - Select 0 for combined load tests or 31 for combined stress tests
 - Select other values to run tests indivdually
 - Tests finished running? This will produce a html link that will open data charts of response times, requests and further information for performance metrics of APIs implemented
@@ -132,4 +133,4 @@ BCrypt Hashing has been utilised for password storage, in the database user pass
 
 - Data not rendering? - ensure the backend is running before running the frontend
 - Issues in data truncation error appearing? - truncate the roles and staffing_managers tables to be emptied. Rerun the backend and add in the SQL statements from data.sql
-- Peformance tests not running or validated? - ensure teh data in the database has no amendments and is from the data.sql file
+- Peformance tests not running or validated? - ensure the data in the database has no amendments and is from the data.sql file
