@@ -11,7 +11,9 @@ To run the application execute the following commands:
 # to run the application
 ```
 
-2. /job-rotation-app/job-rotation-app-frontend
+2. Populate the database with data from data.sql.
+   
+3. /job-rotation-app/job-rotation-app-frontend
 
 ```bash
 npm run dev
@@ -82,6 +84,15 @@ To run the backend application itself:
 # to run backend tests
 ```
 
+## Database
+
+1. Install MySQL Workbench
+2. Create a database connection with connection name: 'job_rotation_db', port: 3306, username: root, password: new_password, and hostname: 127.0.0.1
+3. Create a schema named job_rotation_db.
+4. Run .gradlew bootRun within the job-rotation-app-backend directory to spin up the backend - this will create the necessary tables required for the application.
+5. Update the table using the ALTER SQL statements.
+6. Execute the INSERT SQL statements within the 'data.sql' file in MySQL workbench for data to use while running the application.
+
 ### Backend Tests
 
 Unit tests implemented for the backend can be located at - job-rotation-app-backend/src/test/java/project/job_rotation_app
@@ -91,6 +102,7 @@ Unit tests implemented for the backend can be located at - job-rotation-app-back
 - Gatling - performance testing tool - https://docs.gatling.io/ and https://docs.gatling.io/integrations/build-tools/gradle-plugin/
 - Implementation of user load and stress tests against the application located at job-rotation-app-backend/src/gatling/java
 - Run using ./gradlew gatlingRun whilst in the job-rotation-app-backend directory
+- Ensure the database is populated with the data from data.sql.
 - Select 0 for combined load tests or 31 for combined stress tests
 - Select other values to run tests indivdually
 - Tests finished running? This will produce a html link that will open data charts of response times, requests and further information for performance metrics of APIs implemented
@@ -116,16 +128,8 @@ BCrypt Hashing has been utilised for password storage, in the database user pass
 - For testing purposes, the passwords for the staffing manager users is 'pass'.
 - https://bcrypt.online/ : used to hash plain text passwords before being added to the database.
 
-## Database
-
-1. Install MySQL Workbench
-2. Create a database connection with connection name: 'job_rotation_db', port: 3306, username: root, password: new_password, and hostname: 127.0.0.1
-3. Create a schema named job_rotation_db.
-4. Run .gradlew bootRun within the job-rotation-app-backend directory to spin up the backend - this will create the necessary tables required for the application.
-5. Update the table using the ALTER SQL statements.
-6. Execute the INSERT SQL statements within the 'data.sql' file in MySQL workbench for data to use while running the application.
-
 ## Troubleshoot
 
 - Data not rendering? - ensure the backend is running before running the frontend
 - Issues in data truncation error appearing? - truncate the roles and staffing_managers tables to be emptied. Rerun the backend and add in the SQL statements from data.sql
+- Peformance tests not running or validated? - ensure teh data in the database has no amendments and is from the data.sql file
